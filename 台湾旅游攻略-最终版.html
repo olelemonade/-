@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>台湾中南部旅游攻略</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+        .slide {
+            width: 100vw; min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px; scroll-snap-align: start;
+        }
+        .slide-content {
+            background: white; border-radius: 20px; padding: 40px 30px;
+            max-width: 1200px; width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea; font-size: clamp(28px, 5vw, 48px);
+            margin-bottom: 20px; text-align: center;
+        }
+        h2 {
+            color: #764ba2; font-size: clamp(24px, 4vw, 36px);
+            margin-bottom: 25px; border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        h3 {
+            color: #667eea; font-size: clamp(18px, 3vw, 24px);
+            margin: 20px 0 10px 0;
+        }
+        .subtitle {
+            text-align: center; font-size: clamp(16px, 3vw, 24px);
+            color: #666; margin-bottom: 20px; line-height: 1.6;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px; margin: 25px 0;
+        }
+        .info-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px; border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+        .spot-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px; margin: 20px 0;
+        }
+        .spot-item {
+            background: #f8f9fa; padding: 18px;
+            border-radius: 12px; transition: transform 0.3s;
+            cursor: pointer; position: relative;
+        }
+        .spot-item:active { transform: scale(0.98); }
+        .spot-img {
+            width: 100%; height: 180px; object-fit: cover;
+            border-radius: 10px; margin-bottom: 12px;
+            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+        }
+        .social-links {
+            display: flex; gap: 8px; margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .social-btn {
+            display: inline-flex; align-items: center;
+            padding: 6px 12px; border-radius: 20px;
+            text-decoration: none; font-size: 13px;
+            transition: all 0.3s; font-weight: 500;
+        }
+        .xhs-btn {
+            background: #ff2442; color: white;
+        }
+        .xhs-btn:active { background: #d91d38; }
+        .ins-btn {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+        }
+        .ins-btn:active { opacity: 0.8; }
+        .map-btn {
+            background: #4285f4; color: white;
+        }
+        .map-btn:active { background: #3367d6; }
+        .food-item {
+            background: #fff5e6; padding: 15px; margin: 10px 0;
+            border-radius: 10px; border-left: 4px solid #ff9800;
+        }
+        .warning {
+            background: #ffe6e6; padding: 20px; border-radius: 10px;
+            border-left: 4px solid #ff4444; margin: 20px 0;
+        }
+        .photo-tip {
+            background: #e6f7ff; padding: 15px; border-radius: 10px;
+            border-left: 4px solid #1890ff; margin: 10px 0;
+            font-size: 14px;
+        }
+        ul { list-style: none; padding-left: 0; }
+        li {
+            padding: 5px 0; padding-left: 20px; position: relative;
+            line-height: 1.6;
+        }
+        li:before {
+            content: "✦"; position: absolute; left: 0; color: #667eea;
+        }
+        .container {
+            height: 100vh; overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        button {
+            background: #667eea; color: white; border: none;
+            padding: 12px 25px; border-radius: 30px;
+            font-size: 16px; cursor: pointer;
+            transition: all 0.3s; margin: 10px 5px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        button:active { background: #764ba2; transform: scale(0.95); }
+        #map {
+            width: 100%; height: 500px; border-radius: 15px;
+            margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        @media (max-width: 768px) {
+            .slide { padding: 15px; }
+            .slide-content { padding: 25px 20px; }
+            #map { height: 350px; }
+            .spot-img { height: 150px; }
+        }
+        @media print { .slide { page-break-after: always; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 封面页 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h1>🌸 台湾中南部旅游攻略 🌸</h1>
+                <div class="subtitle">台中 · 台南 · 高雄 精品路线</div>
+                <div class="subtitle" style="font-size: 18px; margin-top: 30px;">
+                    📅 出发日期: 2026年8月21日<br>
+                    👧 专为爱拍照的女孩子定制
+                </div>
+                <div class="info-grid" style="margin-top: 40px;">
+                    <div class="info-card">
+                        <h3>🏙️ 台中</h3>
+                        <p style="font-size: 16px; margin-top: 10px;">1-2天 | 文艺清新</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>🏛️ 台南</h3>
+                        <p style="font-size: 16px; margin-top: 10px;">2-3天 | 古城美食</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>🌊 高雄</h3>
+                        <p style="font-size: 16px; margin-top: 10px;">1天 | 港都风情</p>
+                    </div>
+                </div>
+                <div style="text-align: center; margin-top: 40px;">
+                    <button onclick="scrollToNext()">开始旅程 →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 地图页 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🗺️ 景点地图总览</h2>
+                <p style="margin-bottom: 15px; color: #666;">点击地图标记查看景点详情，可放大缩小和拖动</p>
+                <div id="map"></div>
+                <div class="info-card" style="margin-top: 20px;">
+                    <h3>📍 景点分布</h3>
+                    <ul style="font-size: 14px;">
+                        <li><strong style="color: #ff6b6b;">台中景点</strong> - 市区集中，方便游览</li>
+                        <li><strong style="color: #4ecdc4;">台南景点</strong> - 古城区+安平区</li>
+                        <li><strong style="color: #667eea;">高雄景点</strong> - 沿海港都分布</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 交通页 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🚄 交通信息</h2>
+                <h3>台北 → 台中</h3>
+                <div class="info-card">
+                    <p>🚄 <strong>高铁：</strong>约1小时，票价700台币</p>
+                    <p>🚌 <strong>客运：</strong>约2.5小时，票价260台币</p>
+                    <p style="color: #667eea; margin-top: 10px;">💡 推荐搭乘高铁</p>
+                </div>
+                <h3>台中 → 台南</h3>
+                <div class="info-card">
+                    <p>🚄 <strong>高铁：</strong>约50分钟，票价400台币</p>
+                    <p>🚂 <strong>台铁：</strong>约2小时，票价250台币</p>
+                </div>
+                <h3>台南 → 高雄</h3>
+                <div class="info-card">
+                    <p>🚄 <strong>高铁：</strong>约20分钟，票价200台币</p>
+                    <p>🚇 <strong>台铁：</strong>约40分钟，票价110台币</p>
+                </div>
+                <div class="warning">
+                    <strong>⚠️ 温馨提示：</strong>
+                    <ul>
+                        <li>建议提前在台湾高铁官网购票</li>
+                        <li>早鸟优惠：提前28天6.5折起</li>
+                        <li>市内交通推荐Uber或租机车</li>
+                        <li>建议办理悠游卡通用</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 天气页 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🌤️ 天气信息（8月下旬）</h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3>台中</h3>
+                        <p style="font-size: 32px; margin: 15px 0;">🌤️ 28-34°C</p>
+                        <p>多云转晴，偶有午后雷阵雨</p>
+                        <p style="margin-top: 10px; color: #666;">紫外线强，注意防晒</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>台南</h3>
+                        <p style="font-size: 32px; margin: 15px 0;">☀️ 29-35°C</p>
+                        <p>晴朗炎热，湿度较高</p>
+                        <p style="margin-top: 10px; color: #666;">最热的城市，多补水</p>
+                    </div>
+                    <div class="info-card">
+                        <h3>高雄</h3>
+                        <p style="font-size: 32px; margin: 15px 0;">🌤️ 28-34°C</p>
+                        <p>晴间多云，海风舒适</p>
+                        <p style="margin-top: 10px; color: #666;">沿海风大，注意防风</p>
+                    </div>
+                </div>
+                <div class="photo-tip">
+                    <strong>📸 穿搭建议：</strong>
+                    <ul>
+                        <li>浅色系连衣裙（白色、米色、浅蓝最出片）</li>
+                        <li>防晒衣+墨镜+草帽</li>
+                        <li>舒适凉鞋或小白鞋</li>
+                        <li>轻便小包</li>
+                        <li>备薄外套（室内冷气强）</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- 台中景点 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🏙️ 台中必游景点</h2>
+                <div class="spot-list">
+                    <div class="spot-item">
+                        <img src="https://images.unsplash.com/photo-1590069261209-f8e9b8642343?w=400&h=300&fit=crop" 
+                             class="spot-img" alt="国家歌剧院" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=国家歌剧院'">
+                        <h3>📚 国家歌剧院</h3>
+                        <p><strong>特色：</strong>伊东丰雄设计的曲面建筑</p>
+                        <div class="photo-tip">
+                            <strong>📸 拍照点：</strong>1F大厅仰拍、户外水池倒影、6F空中花园
+                        </div>
+                        <p style="margin-top: 10px;">⏰ 建议停留：1-1.5小时</p>
+                        <div class="social-links">
+                            <a href="https://www.xiaohongshu.com/search_result?keyword=台中国家歌剧院" 
+                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
+                            <a href="https://www.instagram.com/explore/tags/台中国家歌剧院/" 
+                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
+                            <a href="https://maps.google.com/?q=24.1630,120.6387" 
+                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
+                        </div>
+                    </div>
+
+                    <div class="spot-item">
+                        <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&h=300&fit=crop" 
+                             class="spot-img" alt="审计新村" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=审计新村'">
+                        <h3>🌿 审计新村</h3>
+                        <p><strong>特色：</strong>文创聚落，网红咖啡店</p>
+                        <div class="photo-tip">
+                            <strong>📸 拍照点：</strong>彩色货柜屋、文艺小店、涂鸦墙
+                        </div>
+                        <p style="margin-top: 10px;">⏰ 建议停留：2小时</p>
+                        <div class="social-links">
+                            <a href="https://www.xiaohongshu.com/search_result?keyword=台中审计新村" 
+                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
+                            <a href="https://www.instagram.com/explore/tags/审计新村/" 
+                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
+                            <a href="https://maps.google.com/?q=24.1408,120.6818" 
+                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
+                        </div>
+                    </div>
+
+                    <div class="spot-item">
+                        <img src="https://images.unsplash.com/photo-1513002749550-c59d786b8e6c?w=400&h=300&fit=crop" 
+                             class="spot-img" alt="彩虹眷村" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=彩虹眷村'">
+                        <h3>🌈 彩虹眷村</h3>
+                        <p><strong>特色：</strong>彩虹爷爷手绘的梦幻村落</p>
+                        <div class="photo-tip">
+                            <strong>📸 拍照点：</strong>彩色墙面全身照（超出片！）
+                        </div>
+                        <p style="margin-top: 10px;">⏰ 建议停留：1小时</p>
+                        <div class="social-links">
+                            <a href="https://www.xiaohongshu.com/search_result?keyword=台中彩虹眷村" 
+                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
+                            <a href="https://www.instagram.com/explore/tags/彩虹眷村/" 
+                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
+                            <a href="https://maps.google.com/?q=24.1360,120.6177" 
+                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
+                        </div>
+                    </div>
+
+                    <div class="spot-item">
+                        <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop" 
+                             class="spot-img" alt="逢甲夜市" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=逢甲夜市'">
+                        <h3>🌃 逢甲夜市</h3>
+                        <p><strong>特色：</strong>台中最大夜市</p>
+                        <div class="photo-tip">
+                            <strong>📸 拍照点：</strong>霓虹灯招牌、美食近拍
+                        </div>
+                        <p style="margin-top: 10px;">⏰ 建议停留：2-3小时</p>
+                        <div class="social-links">
+                            <a href="https://www.xiaohongshu.com/search_result?keyword=逢甲夜市" 
+                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
+                            <a href="https://www.instagram.com/explore/tags/逢甲夜市/" 
+                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
+                            <a href="https://maps.google.com/?q=24.1797,120.6450" 
+                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
+                        </div>
+                    </div>
+                </div>
+                <h3>🍴 台中必吃美食</h3>
+                <div class="food-item">
+                    <strong>📍 逢甲夜市：</strong>大肠包小肠、章鱼小丸子、黄金右腿
+                </div>
+                <div class="food-item">
+                    <strong>📍 宫原眼科：</strong>冰淇淋、凤梨酥（必打卡）
+                </div>
+            </div>
+        </div>
+
+        <!-- 台南景点 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🏛️ 台南必游景点</h2>
+                <div class="spot-list">
+                    <div class="spot-item">
+                        <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=400&h=300&fit=crop" class="spot-img" alt="赤崁楼">
+                        <h3>🏰 赤崁楼</h3>
+                        <p><strong>特色：</strong>台南最重要古迹</p>
+                        <div class="photo-tip"><strong>📸 拍照点：</strong>红砖城楼、庭院池塘</div>
+                        <p style="margin-top: 10px;">⏰ 建议停留：1小时</p>
+                        <div class="social-links">
+                            <a href="https://www.xiaohongshu.com/search_result?keyword=台南赤崁楼" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
+                            <a href="https://www.instagram.com/explore/tags/赤崁楼/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
+                            <a href="https://maps.google.com/?q=22.9974,120.2025" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
+                        </div>
+                    </div>
+                    <div class="spot-item">
+                        <img src="https://images.unsplash.com/photo-1578491571280-5ef68cf7c4cd?w=400&h=300&fit=crop" class="spot-img" alt="神农街">
+                        <h3>🛍️ 神农街</h3>
+                        <p><strong>特色：</strong>台南最美老街</p>
+                        <div class="photo-tip"><strong>📸 拍照点：</strong>夜晚红灯笼街景</div>
+                        <p style="margin-top: 10px;">⏰ 建议停留：1.5小时</p>
+                        <div class="social-links">
+                            <a href="https://www.xiaohongshu.com/search_result?keyword=台南神农街" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
+                            <a href="https://www.instagram.com/explore/tags/神农街/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
+                            <a href="https://maps.google.com/?q=22.9974,120.1935" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
+                        </div>
+                    </div>
+                    <div class="spot-item">
+                        <img src="https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=400&h=300&fit=crop" class="spot-img" alt="安平古堡">
+                        <h3>🏛️ 安平古堡</h3>
+                        <p><strong>特色：</strong>台湾最古老城堡</p>
+                        <div class="photo-tip"><strong>📸 拍照点：</strong>城堡全景、瞭望台</div>
+                        <p style="margin-top: 10px;">⏰ 建议停留：1.5小时</p>
+                        <div class="social-links">
+                            <a href="https://www.xiaohongshu.com/search_result?keyword=安平古堡" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
+                            <a href="https://www.instagram.com/explore/tags/安平古堡/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
+                            <a href="https://maps.google.com/?q=23.0013,120.1606" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
+                        </div>
+                    </div>
+                    <div class="spot-item">
+                        <img src="https://images.unsplash.com/photo-1580041065738-e72023775cdc?w=400&h=300&fit=crop" class="spot-img" alt="奇美博物馆">
+                        <h3>🎨 奇美博物馆</h3>
+                        <p><strong>特色：</strong>欧式宫殿建筑</p>
+                        <div class="photo-tip"><strong>📸 拍照点：</strong>太阳喷泉、白色宫殿</div>
+                        <p style="margin-top: 10px;">⏰ 建议停留：2-3小时</p>
+                        <div class="social-links">
+                            <a href="https://www.xiaohongshu.com/search_result?keyword=奇美博物馆" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
+                            <a href="https://www.instagram.com/explore/tags/奇美博物馆/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
+                            <a href="https://maps.google.com/?q=23.0812,120.2341" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
+                        </div>
+                    </div>
+                </div>
+                <h3>🍴 台南必吃美食</h3>
+                <div class="food-item"><strong>📍 早餐：</strong>阿堂咸粥、文章牛肉汤</div>
+                <div class="food-item"><strong>📍 午餐：</strong>度小月担仔面、周氏虾卷</div>
+            </div>
+        </div>
+
+        <!-- 高雄景点 -->
+        <div class="slide">
+            <div class="slide-content">
+                <h2>🌊 高雄必游景点</h2>
+                <div class="spot-list">
+                    <div class="spot-item">
+                        <img src="https://images.unsplash.com/photo-1524168948095-0e628393b60f?w=400&h=300&fit=crop" class="spot-img" alt="美丽岛站">
+                        <h3>🚇 美丽岛捷运站</h3>
+                        <p><strong>特色：</strong>世界最美地铁站</p>
+                        <div class="photo-tip"><strong>📸 拍照点：</strong>仰拍光之穹顶</div>
+                        <p style="margin-top: 10px;">⏰ 建议停留：30分钟</p>
+                        <div class="social-links">
+                            <a href="https://www.xiaohongshu.com/search_result?keyword=高雄美丽岛站" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
+                            <a href="https://www.instagram.com/explore/tags/美丽岛站/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
+                            <a href="https://maps.google.com/?q=22.6363,120.3018" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
+                        </div>
+                    </div>
+                    <div class="spot-item">
+                        <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop" class="spot-img" alt="驳二">
+                        <h3>🏛️ 驳二艺术特区</h3>
+                        <p><strong>特色：</strong>文创艺术聚落</p>
+                        <div class="photo-tip"><strong>📸 拍照点：</strong>大型艺术装置、涂鸦墙</div>
+                        <p style="margin-top: 10px;">⏰ 建议停留：2-3小时</p>
+                        <div class="social-links">
+                            <a href="https://www.xiaohongshu.com/search_result?keyword=高雄驳二" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
+                            <a href="https://www.instagram.com/explore/tags/驳二艺术特区/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
+                            <a href="https://maps.google.com/?q=22.6202,120.2815" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
+                        </div>
+                    </div>
+                    <div class="spot-item">
+                        <img src="https://images.unsplash.com/photo-1562979314-bee7453e911c?w=400&h=300&fit=crop" class="spot-img" alt="西子湾">
+                        <h3>🌉 西子湾</h3>
+                        <p><strong>特色：</strong>海景夕阳</p>
+                        <div class="photo-tip"><strong>📸 拍照点：</strong>日落剪影、海边礁石</div>
+                        <p style="margin-top: 10px;">⏰ 建议停留：2小时</p>
+                        <div class="social-links">
+                            <a href="https://www.xiaohongshu.com/search_result?keyword=高雄西子湾" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
+                            <a href="https://www.instagram.com/explore/tags/西子湾/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
+                            <a href="https://maps.google.com/?q=22.6234,120.2658" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
+                        </div>
+                    </div>
+                    <div class="spot-item">
+                        <img src="https://images.unsplash.com/photo-1548013146-72479768bada?w=400&h=300&fit=crop" class="spot-img" alt="龙虎塔">
+                        <h3>⛩️ 龙虎塔</h3>
+                        <p><strong>特色：</strong>莲池潭标志景点</p>
+                        <div class="photo-tip"><strong>📸 拍照点：</strong>双塔倒影、龙虎口</div>
+                        <p style="margin-top: 10px;">⏰ 建议停留：1小时</p>
+                        <div class="social-links">
+                            <a href="https://www.xiaohongshu.com/search_result?keyword=高雄龙虎塔" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
+                            <a href="https://www.instagram.com/explore/tags/龙虎塔/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
+                            <a href="https://maps.google.com/?q=22.6832,120.2938" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
+                        </div>
+                    </div>
+                </div>
+                <h3>🍴 高雄必吃美食</h3>
+                <div class="food-item"><strong>📍 六合夜市：</strong>郑老牌木瓜牛奶、海产粥</div>
+                <div class="food-item"><strong>📍 市区：</strong>丹丹汉堡（高雄限定）</div>
+            </div>
+        </div>
+
+        <!-- 结束页 -->
+        <div class="slide">
+            <div class="slide-content" style="text-align: center;">
+                <h1>🌸 祝你旅途愉快！🌸</h1>
+                <p style="font-size: 22px; margin: 40px 0; color: #666; line-height: 1.8;">
+                    台湾很安全，人也很友善<br>
+                    放松心情，享受美食美景<br>
+                    拍出最美的照片！
+                </p>
+                <div class="info-card" style="max-width: 600px; margin: 40px auto;">
+                    <h3>🎁 旅行清单</h3>
+                    <ul style="text-align: left;">
+                        <li>台湾通行证+入台证</li>
+                        <li>手机+充电宝</li>
+                        <li>防晒霜SPF50+</li>
+                        <li>墨镜+帽子</li>
+                        <li>舒适鞋子</li>
+                        <li>薄外套</li>
+                        <li>悠游卡</li>
+                        <li>好心情！</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const map = L.map("map").setView([23.5, 120.5], 8);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "OpenStreetMap",
+            maxZoom: 18
+        }).addTo(map);
+
+        const spots = [
+            {n:"国家歌剧院",c:[24.1630,120.6387]},
+            {n:"审计新村",c:[24.1408,120.6818]},
+            {n:"彩虹眷村",c:[24.1360,120.6177]},
+            {n:"逢甲夜市",c:[24.1797,120.6450]},
+            {n:"赤崁楼",c:[22.9974,120.2025]},
+            {n:"神农街",c:[22.9974,120.1935]},
+            {n:"安平古堡",c:[23.0013,120.1606]},
+            {n:"奇美博物馆",c:[23.0812,120.2341]},
+            {n:"美丽岛站",c:[22.6363,120.3018]},
+            {n:"驳二",c:[22.6202,120.2815]},
+            {n:"西子湾",c:[22.6234,120.2658]},
+            {n:"龙虎塔",c:[22.6832,120.2938]}
+        ];
+
+        spots.forEach(function(s){
+            const marker = L.marker(s.c).addTo(map);
+            marker.bindPopup("<b>"+s.n+"</b><br><a href=https://maps.google.com/?q="+s.c[0]+","+s.c[1]+" target=_blank>导航</a>");
+        });
+
+        function scrollToNext(){
+            document.querySelector(".container").scrollBy({top:window.innerHeight,behavior:"smooth"});
+        }
+
+        document.addEventListener("keydown",function(e){
+            const c=document.querySelector(".container");
+            if(e.key==="ArrowDown"||e.key==="PageDown"||e.key===" "){
+                e.preventDefault();
+                c.scrollBy({top:window.innerHeight,behavior:"smooth"});
+            }else if(e.key==="ArrowUp"||e.key==="PageUp"){
+                e.preventDefault();
+                c.scrollBy({top:-window.innerHeight,behavior:"smooth"});
+            }
+        });
+
+        let touchStartY=0;
+        document.addEventListener("touchstart",function(e){
+            touchStartY=e.touches[0].clientY;
+        },{passive:true});
+        
+        document.addEventListener("touchend",function(e){
+            const touchEndY=e.changedTouches[0].clientY;
+            const diff=touchStartY-touchEndY;
+            const c=document.querySelector(".container");
+            if(Math.abs(diff)>50){
+                if(diff>0){
+                    c.scrollBy({top:window.innerHeight,behavior:"smooth"});
+                }else{
+                    c.scrollBy({top:-window.innerHeight,behavior:"smooth"});
+                }
+            }
+        },{passive:true});
+    </script>
+</body>
+</html>
