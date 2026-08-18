@@ -115,7 +115,7 @@
         }
         .container {
             height: 100vh; overflow-y: scroll;
-            scroll-snap-type: y mandatory;
+            scroll-snap-type: y proximity;
             -webkit-overflow-scrolling: touch;
         }
         button {
@@ -607,39 +607,16 @@
             }
         });
 
-        // 防止地图触摸事件触发页面滑动
-        let mapInteracting = false;
-        const mapElement = document.getElementById('map');
-
-        if (mapElement) {
-            mapElement.addEventListener('touchstart', function(e) {
-                mapInteracting = true;
-                e.stopPropagation();
-            }, {passive: false});
-
-            mapElement.addEventListener('touchend', function(e) {
-                setTimeout(() => { mapInteracting = false; }, 300);
-                e.stopPropagation();
-            }, {passive: false});
-
-            mapElement.addEventListener('touchmove', function(e) {
-                e.stopPropagation();
-            }, {passive: false});
-        }
-
-        // 增强滑动检测
+        // 平滑滑动手势 - 只在明确上下滑动时翻页
         let touchStartY = 0, touchStartX = 0, touchStartTime = 0;
 
         document.addEventListener('touchstart', function(e) {
-            if (e.target.closest('#map') || mapInteracting) return;
             touchStartY = e.touches[0].clientY;
             touchStartX = e.touches[0].clientX;
             touchStartTime = Date.now();
         }, {passive: true});
 
         document.addEventListener('touchend', function(e) {
-            if (e.target.closest('#map') || mapInteracting) return;
-
             const touchEndY = e.changedTouches[0].clientY;
             const touchEndX = e.changedTouches[0].clientX;
             const touchEndTime = Date.now();
@@ -648,8 +625,8 @@
             const diffX = Math.abs(touchStartX - touchEndX);
             const timeDiff = touchEndTime - touchStartTime;
 
-            // 提高阈值到100px，确保是垂直滑动
-            if (Math.abs(diffY) > 100 && Math.abs(diffY) > diffX * 1.5 && timeDiff < 500) {
+            // 只有快速明确的垂直滑动才翻页（大幅滑动 + 垂直为主 + 快速完成）
+            if (Math.abs(diffY) > 120 && Math.abs(diffY) > diffX * 2 && timeDiff < 400) {
                 const c = document.querySelector('.container');
                 if (diffY > 0) {
                     c.scrollBy({top: window.innerHeight, behavior: 'smooth'});
