@@ -131,10 +131,82 @@
             margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         @media (max-width: 768px) {
-            .slide { padding: 15px; }
-            .slide-content { padding: 25px 20px; }
-            #map { height: 350px; }
-            .spot-img { height: 150px; }
+            .slide {
+                padding: 10px;
+                scroll-snap-align: start;
+            }
+            .slide-content {
+                padding: 20px 15px;
+                border-radius: 15px;
+            }
+            h1 { font-size: 24px !important; }
+            h2 { font-size: 20px !important; margin-bottom: 20px; }
+            h3 { font-size: 18px !important; }
+
+            .info-grid {
+                grid-template-columns: 1fr !important;
+                gap: 12px;
+            }
+            .spot-list {
+                grid-template-columns: 1fr !important;
+                gap: 12px;
+            }
+
+            .spot-item {
+                padding: 15px;
+            }
+            .spot-img {
+                height: 200px !important;
+                margin-bottom: 10px;
+            }
+
+            .social-links {
+                gap: 10px;
+                margin-top: 15px;
+            }
+            .social-btn {
+                padding: 10px 15px !important;
+                font-size: 14px !important;
+                min-height: 44px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            #map {
+                height: 300px !important;
+                margin: 15px 0;
+                border-radius: 12px;
+                touch-action: pan-x pan-y pinch-zoom !important;
+            }
+
+            p, li {
+                font-size: 15px !important;
+                line-height: 1.6;
+            }
+
+            .food-item {
+                padding: 12px;
+                font-size: 14px !important;
+            }
+
+            .photo-tip {
+                padding: 12px;
+                font-size: 13px !important;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .slide-content {
+                padding: 15px 10px;
+            }
+            h1 { font-size: 22px !important; }
+            h2 { font-size: 18px !important; }
+            .spot-img { height: 180px !important; }
+            .social-btn {
+                padding: 8px 12px !important;
+                font-size: 13px !important;
+            }
         }
         @media print { .slide { page-break-after: always; } }
     </style>
@@ -535,23 +607,57 @@
             }
         });
 
-        let touchStartY=0;
-        document.addEventListener("touchstart",function(e){
-            touchStartY=e.touches[0].clientY;
-        },{passive:true});
-        
-        document.addEventListener("touchend",function(e){
-            const touchEndY=e.changedTouches[0].clientY;
-            const diff=touchStartY-touchEndY;
-            const c=document.querySelector(".container");
-            if(Math.abs(diff)>50){
-                if(diff>0){
-                    c.scrollBy({top:window.innerHeight,behavior:"smooth"});
-                }else{
-                    c.scrollBy({top:-window.innerHeight,behavior:"smooth"});
+        // 防止地图触摸事件触发页面滑动
+        let mapInteracting = false;
+        const mapElement = document.getElementById('map');
+
+        if (mapElement) {
+            mapElement.addEventListener('touchstart', function(e) {
+                mapInteracting = true;
+                e.stopPropagation();
+            }, {passive: false});
+
+            mapElement.addEventListener('touchend', function(e) {
+                setTimeout(() => { mapInteracting = false; }, 300);
+                e.stopPropagation();
+            }, {passive: false});
+
+            mapElement.addEventListener('touchmove', function(e) {
+                e.stopPropagation();
+            }, {passive: false});
+        }
+
+        // 增强滑动检测
+        let touchStartY = 0, touchStartX = 0, touchStartTime = 0;
+
+        document.addEventListener('touchstart', function(e) {
+            if (e.target.closest('#map') || mapInteracting) return;
+            touchStartY = e.touches[0].clientY;
+            touchStartX = e.touches[0].clientX;
+            touchStartTime = Date.now();
+        }, {passive: true});
+
+        document.addEventListener('touchend', function(e) {
+            if (e.target.closest('#map') || mapInteracting) return;
+
+            const touchEndY = e.changedTouches[0].clientY;
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndTime = Date.now();
+
+            const diffY = touchStartY - touchEndY;
+            const diffX = Math.abs(touchStartX - touchEndX);
+            const timeDiff = touchEndTime - touchStartTime;
+
+            // 提高阈值到100px，确保是垂直滑动
+            if (Math.abs(diffY) > 100 && Math.abs(diffY) > diffX * 1.5 && timeDiff < 500) {
+                const c = document.querySelector('.container');
+                if (diffY > 0) {
+                    c.scrollBy({top: window.innerHeight, behavior: 'smooth'});
+                } else {
+                    c.scrollBy({top: -window.innerHeight, behavior: 'smooth'});
                 }
             }
-        },{passive:true});
+        }, {passive: true});
     </script>
 </body>
 </html>
