@@ -1,1131 +1,1870 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
     <title>台湾中南部旅游攻略</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: #fff;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' width='200' height='200'%3E%3Cg fill='%23d97d88' fill-opacity='0.18'%3E%3Cellipse cx='100' cy='30' rx='25' ry='35' transform='rotate(-10 100 30)'/%3E%3Cellipse cx='145' cy='55' rx='25' ry='35' transform='rotate(35 145 55)'/%3E%3Cellipse cx='170' cy='100' rx='25' ry='35' transform='rotate(80 170 100)'/%3E%3Cellipse cx='145' cy='145' rx='25' ry='35' transform='rotate(125 145 145)'/%3E%3Cellipse cx='100' cy='170' rx='25' ry='35' transform='rotate(170 100 170)'/%3E%3Cellipse cx='55' cy='145' rx='25' ry='35' transform='rotate(215 55 145)'/%3E%3Cellipse cx='30' cy='100' rx='25' ry='35' transform='rotate(260 30 100)'/%3E%3Cellipse cx='55' cy='55' rx='25' ry='35' transform='rotate(305 55 55)'/%3E%3C/g%3E%3Cg fill='%23d97d88' fill-opacity='0.22'%3E%3Cellipse cx='100' cy='45' rx='18' ry='28' transform='rotate(10 100 45)'/%3E%3Cellipse cx='133' cy='67' rx='18' ry='28' transform='rotate(55 133 67)'/%3E%3Cellipse cx='155' cy='100' rx='18' ry='28' transform='rotate(100 155 100)'/%3E%3Cellipse cx='133' cy='133' rx='18' ry='28' transform='rotate(145 133 133)'/%3E%3Cellipse cx='100' cy='155' rx='18' ry='28' transform='rotate(190 100 155)'/%3E%3Cellipse cx='67' cy='133' rx='18' ry='28' transform='rotate(235 67 133)'/%3E%3Cellipse cx='45' cy='100' rx='18' ry='28' transform='rotate(280 45 100)'/%3E%3Cellipse cx='67' cy='67' rx='18' ry='28' transform='rotate(325 67 67)'/%3E%3C/g%3E%3Cg fill='%23d97d88' fill-opacity='0.28'%3E%3Cellipse cx='100' cy='60' rx='15' ry='22' transform='rotate(30 100 60)'/%3E%3Cellipse cx='124' cy='76' rx='15' ry='22' transform='rotate(90 124 76)'/%3E%3Cellipse cx='140' cy='100' rx='15' ry='22' transform='rotate(150 140 100)'/%3E%3Cellipse cx='124' cy='124' rx='15' ry='22' transform='rotate(210 124 124)'/%3E%3Cellipse cx='100' cy='140' rx='15' ry='22' transform='rotate(270 100 140)'/%3E%3Cellipse cx='76' cy='124' rx='15' ry='22' transform='rotate(330 76 124)'/%3E%3Cellipse cx='60' cy='100' rx='15' ry='22' transform='rotate(30 60 100)'/%3E%3Cellipse cx='76' cy='76' rx='15' ry='22' transform='rotate(90 76 76)'/%3E%3C/g%3E%3Cg fill='%23d97d88' fill-opacity='0.35'%3E%3Cpath d='M100 75 Q110 75 115 85 Q115 95 105 100 Q95 100 85 95 Q80 85 85 80 Q90 75 100 75z'/%3E%3Cpath d='M100 80 Q108 82 110 90 Q108 98 100 100 Q92 98 88 92 Q88 85 92 82 Q95 80 100 80z'/%3E%3Ccircle cx='100' cy='90' r='8' fill-opacity='0.45'/%3E%3C/g%3E%3Ccircle cx='100' cy='90' r='5' fill='%23d97d88' fill-opacity='0.5'/%3E%3C/svg%3E");
-            background-size: 140px 140px;
-            background-attachment: fixed;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+          "Microsoft YaHei", sans-serif;
+        background: #fff;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' width='200' height='200'%3E%3Cg fill='%23d97d88' fill-opacity='0.18'%3E%3Cellipse cx='100' cy='30' rx='25' ry='35' transform='rotate(-10 100 30)'/%3E%3Cellipse cx='145' cy='55' rx='25' ry='35' transform='rotate(35 145 55)'/%3E%3Cellipse cx='170' cy='100' rx='25' ry='35' transform='rotate(80 170 100)'/%3E%3Cellipse cx='145' cy='145' rx='25' ry='35' transform='rotate(125 145 145)'/%3E%3Cellipse cx='100' cy='170' rx='25' ry='35' transform='rotate(170 100 170)'/%3E%3Cellipse cx='55' cy='145' rx='25' ry='35' transform='rotate(215 55 145)'/%3E%3Cellipse cx='30' cy='100' rx='25' ry='35' transform='rotate(260 30 100)'/%3E%3Cellipse cx='55' cy='55' rx='25' ry='35' transform='rotate(305 55 55)'/%3E%3C/g%3E%3Cg fill='%23d97d88' fill-opacity='0.22'%3E%3Cellipse cx='100' cy='45' rx='18' ry='28' transform='rotate(10 100 45)'/%3E%3Cellipse cx='133' cy='67' rx='18' ry='28' transform='rotate(55 133 67)'/%3E%3Cellipse cx='155' cy='100' rx='18' ry='28' transform='rotate(100 155 100)'/%3E%3Cellipse cx='133' cy='133' rx='18' ry='28' transform='rotate(145 133 133)'/%3E%3Cellipse cx='100' cy='155' rx='18' ry='28' transform='rotate(190 100 155)'/%3E%3Cellipse cx='67' cy='133' rx='18' ry='28' transform='rotate(235 67 133)'/%3E%3Cellipse cx='45' cy='100' rx='18' ry='28' transform='rotate(280 45 100)'/%3E%3Cellipse cx='67' cy='67' rx='18' ry='28' transform='rotate(325 67 67)'/%3E%3C/g%3E%3Cg fill='%23d97d88' fill-opacity='0.28'%3E%3Cellipse cx='100' cy='60' rx='15' ry='22' transform='rotate(30 100 60)'/%3E%3Cellipse cx='124' cy='76' rx='15' ry='22' transform='rotate(90 124 76)'/%3E%3Cellipse cx='140' cy='100' rx='15' ry='22' transform='rotate(150 140 100)'/%3E%3Cellipse cx='124' cy='124' rx='15' ry='22' transform='rotate(210 124 124)'/%3E%3Cellipse cx='100' cy='140' rx='15' ry='22' transform='rotate(270 100 140)'/%3E%3Cellipse cx='76' cy='124' rx='15' ry='22' transform='rotate(330 76 124)'/%3E%3Cellipse cx='60' cy='100' rx='15' ry='22' transform='rotate(30 60 100)'/%3E%3Cellipse cx='76' cy='76' rx='15' ry='22' transform='rotate(90 76 76)'/%3E%3C/g%3E%3Cg fill='%23d97d88' fill-opacity='0.35'%3E%3Cpath d='M100 75 Q110 75 115 85 Q115 95 105 100 Q95 100 85 95 Q80 85 85 80 Q90 75 100 75z'/%3E%3Cpath d='M100 80 Q108 82 110 90 Q108 98 100 100 Q92 98 88 92 Q88 85 92 82 Q95 80 100 80z'/%3E%3Ccircle cx='100' cy='90' r='8' fill-opacity='0.45'/%3E%3C/g%3E%3Ccircle cx='100' cy='90' r='5' fill='%23d97d88' fill-opacity='0.5'/%3E%3C/svg%3E");
+        background-size: 140px 140px;
+        background-attachment: fixed;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+      }
+      .slide {
+        width: 100vw;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        scroll-snap-align: start;
+        background: transparent;
+      }
+      .slide-content {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px 30px;
+        max-width: 1200px;
+        width: 100%;
+        box-shadow: 0 10px 40px rgba(255, 105, 135, 0.15);
+        border: 1px solid rgba(255, 192, 211, 0.3);
+      }
+      h1 {
+        color: #667eea;
+        font-size: clamp(28px, 5vw, 48px);
+        margin-bottom: 20px;
+        text-align: center;
+      }
+      h2 {
+        color: #764ba2;
+        font-size: clamp(24px, 4vw, 36px);
+        margin-bottom: 25px;
+        border-bottom: 3px solid #667eea;
+        padding-bottom: 10px;
+      }
+      h3 {
+        color: #667eea;
+        font-size: clamp(18px, 3vw, 24px);
+        margin: 20px 0 10px 0;
+      }
+      .subtitle {
+        text-align: center;
+        font-size: clamp(16px, 3vw, 24px);
+        color: #666;
+        margin-bottom: 20px;
+        line-height: 1.6;
+      }
+      .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin: 25px 0;
+      }
+      .info-card {
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        padding: 20px;
+        border-radius: 15px;
+        border-left: 5px solid #667eea;
+      }
+      .info-card h3 {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .card-arrow {
+        color: #667eea;
+        font-size: 0.8em;
+        transition: transform 0.3s;
+      }
+      .info-card:hover .card-arrow {
+        transform: translateX(4px);
+      }
+      .spot-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+      .spot-item {
+        background: #f8f9fa;
+        padding: 18px;
+        border-radius: 12px;
+        transition: transform 0.3s;
+        cursor: pointer;
+        position: relative;
+      }
+      .spot-item:active {
+        transform: scale(0.98);
+      }
+      .spot-img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+      }
+      .spot-gallery {
+        position: relative;
+        overflow: hidden;
+        border-radius: 10px;
+        margin-bottom: 12px;
+      }
+      .gallery-track {
+        display: flex;
+        transition: transform 0.3s ease;
+      }
+      .gallery-track .spot-img {
+        flex: 0 0 100%;
+        width: 100%;
+        height: auto;
+        margin-bottom: 0;
+        border-radius: 0;
+      }
+      .gallery-dots {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+      }
+      .gallery-dots .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.55);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .gallery-dots .dot.active {
+        background: #fff;
+        width: 18px;
+        border-radius: 4px;
+      }
+      .social-links {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+      .social-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-size: 13px;
+        transition: all 0.3s;
+        font-weight: 500;
+      }
+      .xhs-btn {
+        background: #ff2442;
+        color: white;
+      }
+      .xhs-btn:active {
+        background: #d91d38;
+      }
+      .ins-btn {
+        background: linear-gradient(
+          45deg,
+          #f09433 0%,
+          #e6683c 25%,
+          #dc2743 50%,
+          #cc2366 75%,
+          #bc1888 100%
+        );
+        color: white;
+      }
+      .ins-btn:active {
+        opacity: 0.8;
+      }
+      .map-btn {
+        background: #4285f4;
+        color: white;
+      }
+      .map-btn:active {
+        background: #3367d6;
+      }
+      .food-item {
+        background: #fff5e6;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 10px;
+        border-left: 4px solid #ff9800;
+      }
+      .warning {
+        background: #ffe6e6;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 4px solid #ff4444;
+        margin: 20px 0;
+      }
+      .photo-tip {
+        background: #e6f7ff;
+        padding: 15px;
+        border-radius: 10px;
+        border-left: 4px solid #1890ff;
+        margin: 10px 0;
+        font-size: 14px;
+      }
+      ul {
+        list-style: none;
+        padding-left: 0;
+      }
+      li {
+        padding: 5px 0;
+        padding-left: 20px;
+        position: relative;
+        line-height: 1.6;
+      }
+      li:before {
+        content: "✦";
+        position: absolute;
+        left: 0;
+        color: #667eea;
+      }
+      .container {
+        height: 100vh;
+        overflow-y: scroll;
+        scroll-snap-type: y proximity;
+        -webkit-overflow-scrolling: touch;
+      }
+      button {
+        background: #667eea;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 30px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin: 10px 5px;
+        -webkit-tap-highlight-color: transparent;
+      }
+      button:active {
+        background: #764ba2;
+        transform: scale(0.95);
+      }
+      #map {
+        width: 100%;
+        height: 500px;
+        border-radius: 15px;
+        margin: 20px 0;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      }
+      @media (max-width: 768px) {
         .slide {
-            width: 100vw; min-height: 100vh;
-            display: flex; align-items: center; justify-content: center;
-            padding: 20px; scroll-snap-align: start;
-            background: transparent;
+          padding: 10px;
+          scroll-snap-align: start;
         }
         .slide-content {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-radius: 20px; padding: 40px 30px;
-            max-width: 1200px; width: 100%;
-            box-shadow: 0 10px 40px rgba(255, 105, 135, 0.15);
-            border: 1px solid rgba(255, 192, 211, 0.3);
+          padding: 20px 15px;
+          border-radius: 15px;
         }
         h1 {
-            color: #667eea; font-size: clamp(28px, 5vw, 48px);
-            margin-bottom: 20px; text-align: center;
+          font-size: 24px !important;
         }
         h2 {
-            color: #764ba2; font-size: clamp(24px, 4vw, 36px);
-            margin-bottom: 25px; border-bottom: 3px solid #667eea;
-            padding-bottom: 10px;
+          font-size: 20px !important;
+          margin-bottom: 20px;
         }
         h3 {
-            color: #667eea; font-size: clamp(18px, 3vw, 24px);
-            margin: 20px 0 10px 0;
+          font-size: 18px !important;
         }
-        .subtitle {
-            text-align: center; font-size: clamp(16px, 3vw, 24px);
-            color: #666; margin-bottom: 20px; line-height: 1.6;
-        }
+
         .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 15px; margin: 25px 0;
-        }
-        .info-card {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding: 20px; border-radius: 15px;
-            border-left: 5px solid #667eea;
+          grid-template-columns: 1fr !important;
+          gap: 12px;
         }
         .spot-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 15px; margin: 20px 0;
+          grid-template-columns: 1fr !important;
+          gap: 12px;
         }
+
         .spot-item {
-            background: #f8f9fa; padding: 18px;
-            border-radius: 12px; transition: transform 0.3s;
-            cursor: pointer; position: relative;
+          padding: 15px;
         }
-        .spot-item:active { transform: scale(0.98); }
         .spot-img {
-            width: 100%; height: auto;
-            border-radius: 10px; margin-bottom: 12px;
-            background: linear-gradient(135deg, #e0e0e0 0%, #f5f5f5 100%);
+          margin-bottom: 10px;
         }
-        .spot-gallery {
-            position: relative;
-            overflow: hidden;
-            border-radius: 10px;
-            margin-bottom: 12px;
-        }
-        .gallery-track {
-            display: flex;
-            transition: transform 0.3s ease;
-        }
-        .gallery-track .spot-img {
-            flex: 0 0 100%;
-            width: 100%;
-            height: auto;
-            margin-bottom: 0;
-            border-radius: 0;
-        }
-        .gallery-dots {
-            position: absolute;
-            bottom: 10px;
-            left: 0;
-            right: 0;
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-        }
-        .gallery-dots .dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.55);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .gallery-dots .dot.active {
-            background: #fff;
-            width: 18px;
-            border-radius: 4px;
-        }
+
         .social-links {
-            display: flex; gap: 8px; margin-top: 12px;
-            flex-wrap: wrap;
+          gap: 10px;
+          margin-top: 15px;
         }
         .social-btn {
-            display: inline-flex; align-items: center;
-            padding: 6px 12px; border-radius: 20px;
-            text-decoration: none; font-size: 13px;
-            transition: all 0.3s; font-weight: 500;
+          padding: 10px 15px !important;
+          font-size: 14px !important;
+          min-height: 44px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
         }
-        .xhs-btn {
-            background: #ff2442; color: white;
-        }
-        .xhs-btn:active { background: #d91d38; }
-        .ins-btn {
-            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-            color: white;
-        }
-        .ins-btn:active { opacity: 0.8; }
-        .map-btn {
-            background: #4285f4; color: white;
-        }
-        .map-btn:active { background: #3367d6; }
-        .food-item {
-            background: #fff5e6; padding: 15px; margin: 10px 0;
-            border-radius: 10px; border-left: 4px solid #ff9800;
-        }
-        .warning {
-            background: #ffe6e6; padding: 20px; border-radius: 10px;
-            border-left: 4px solid #ff4444; margin: 20px 0;
-        }
-        .photo-tip {
-            background: #e6f7ff; padding: 15px; border-radius: 10px;
-            border-left: 4px solid #1890ff; margin: 10px 0;
-            font-size: 14px;
-        }
-        ul { list-style: none; padding-left: 0; }
-        li {
-            padding: 5px 0; padding-left: 20px; position: relative;
-            line-height: 1.6;
-        }
-        li:before {
-            content: "✦"; position: absolute; left: 0; color: #667eea;
-        }
-        .container {
-            height: 100vh; overflow-y: scroll;
-            scroll-snap-type: y proximity;
-            -webkit-overflow-scrolling: touch;
-        }
-        button {
-            background: #667eea; color: white; border: none;
-            padding: 12px 25px; border-radius: 30px;
-            font-size: 16px; cursor: pointer;
-            transition: all 0.3s; margin: 10px 5px;
-            -webkit-tap-highlight-color: transparent;
-        }
-        button:active { background: #764ba2; transform: scale(0.95); }
+
         #map {
-            width: 100%; height: 500px; border-radius: 15px;
-            margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        @media (max-width: 768px) {
-            .slide {
-                padding: 10px;
-                scroll-snap-align: start;
-            }
-            .slide-content {
-                padding: 20px 15px;
-                border-radius: 15px;
-            }
-            h1 { font-size: 24px !important; }
-            h2 { font-size: 20px !important; margin-bottom: 20px; }
-            h3 { font-size: 18px !important; }
-
-            .info-grid {
-                grid-template-columns: 1fr !important;
-                gap: 12px;
-            }
-            .spot-list {
-                grid-template-columns: 1fr !important;
-                gap: 12px;
-            }
-
-            .spot-item {
-                padding: 15px;
-            }
-            .spot-img {
-                margin-bottom: 10px;
-            }
-
-            .social-links {
-                gap: 10px;
-                margin-top: 15px;
-            }
-            .social-btn {
-                padding: 10px 15px !important;
-                font-size: 14px !important;
-                min-height: 44px;
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-            }
-
-            #map {
-                height: 300px !important;
-                margin: 15px 0;
-                border-radius: 12px;
-                touch-action: pan-x pan-y pinch-zoom !important;
-            }
-
-            p, li {
-                font-size: 15px !important;
-                line-height: 1.6;
-            }
-
-            .food-item {
-                padding: 12px;
-                font-size: 14px !important;
-            }
-
-            .photo-tip {
-                padding: 12px;
-                font-size: 13px !important;
-            }
+          height: 300px !important;
+          margin: 15px 0;
+          border-radius: 12px;
+          touch-action: pan-x pan-y pinch-zoom !important;
         }
 
-        @media (max-width: 400px) {
-            .slide-content {
-                padding: 15px 10px;
-            }
-            h1 { font-size: 22px !important; }
-            h2 { font-size: 18px !important; }
-            .social-btn {
-                padding: 8px 12px !important;
-                font-size: 13px !important;
-            }
+        p,
+        li {
+          font-size: 15px !important;
+          line-height: 1.6;
         }
+
+        .food-item {
+          padding: 12px;
+          font-size: 14px !important;
+        }
+
+        .photo-tip {
+          padding: 12px;
+          font-size: 13px !important;
+        }
+      }
+
+      @media (max-width: 400px) {
+        .slide-content {
+          padding: 15px 10px;
+        }
+        h1 {
+          font-size: 22px !important;
+        }
+        h2 {
+          font-size: 18px !important;
+        }
+        .social-btn {
+          padding: 8px 12px !important;
+          font-size: 13px !important;
+        }
+      }
+      .music-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #ea8d94 0%, #f8b4b4 100%);
+        border: 3px solid white;
+        box-shadow: 0 4px 15px rgba(234, 141, 148, 0.4);
+        font-size: 28px;
+        cursor: pointer;
+        z-index: 1000;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
+      .music-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(234, 141, 148, 0.6);
+      }
+      .music-btn:active {
+        transform: scale(0.95);
+      }
+      .music-btn.playing {
+        animation: pulse 1.5s infinite;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+      .map-nav-btn {
+        position: fixed;
+        bottom: 30px;
+        left: 30px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: 3px solid white;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        font-size: 28px;
+        cursor: pointer;
+        z-index: 1000;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+      }
+      .map-nav-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+      }
+      .map-nav-btn:active {
+        transform: scale(0.95);
+      }
+      @media (max-width: 768px) {
         .music-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ea8d94 0%, #f8b4b4 100%);
-            border: 3px solid white;
-            box-shadow: 0 4px 15px rgba(234, 141, 148, 0.4);
-            font-size: 28px;
-            cursor: pointer;
-            z-index: 1000;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-        .music-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(234, 141, 148, 0.6);
-        }
-        .music-btn:active {
-            transform: scale(0.95);
-        }
-        .music-btn.playing {
-            animation: pulse 1.5s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+          width: 50px;
+          height: 50px;
+          bottom: 20px;
+          right: 20px;
+          font-size: 24px;
         }
         .map-nav-btn {
-            position: fixed;
-            bottom: 30px;
-            left: 30px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: 3px solid white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-            font-size: 28px;
-            cursor: pointer;
-            z-index: 1000;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
+          width: 50px;
+          height: 50px;
+          bottom: 20px;
+          left: 20px;
+          font-size: 24px;
         }
-        .map-nav-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+      }
+      @media print {
+        .slide {
+          page-break-after: always;
         }
-        .map-nav-btn:active {
-            transform: scale(0.95);
+        .music-btn {
+          display: none;
         }
-        @media (max-width: 768px) {
-            .music-btn {
-                width: 50px;
-                height: 50px;
-                bottom: 20px;
-                right: 20px;
-                font-size: 24px;
-            }
-            .map-nav-btn {
-                width: 50px;
-                height: 50px;
-                bottom: 20px;
-                left: 20px;
-                font-size: 24px;
-            }
+        .map-nav-btn {
+          display: none;
         }
-        @media print { .slide { page-break-after: always; } .music-btn { display: none; } .map-nav-btn { display: none; } }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- 背景音乐 -->
     <audio id="bgMusic" loop>
-        <source src="music/background.flac" type="audio/flac">
-        <source src="music/background.mp3" type="audio/mpeg">
+      <source src="music/background.flac" type="audio/flac" />
+      <source src="music/background.mp3" type="audio/mpeg" />
     </audio>
 
     <!-- 音乐控制按钮 -->
     <button id="musicToggle" class="music-btn" title="点击播放音乐">🎵</button>
 
     <!-- 回到地图按钮 -->
-    <button id="backToMapBtn" class="map-nav-btn" title="回到地图" onclick="goToSlide('map-slide')">🗺️</button>
+    <button
+      id="backToMapBtn"
+      class="map-nav-btn"
+      title="回到地图"
+      onclick="goToSlide('map-slide')"
+    >
+      🗺️
+    </button>
 
     <div class="container">
-        <!-- 封面页 -->
-        <div class="slide">
-            <div class="slide-content">
-                <h1>🌸 台湾中南部旅游攻略 🌸</h1>
-                <div class="subtitle">台中 · 台南 · 高雄</div>
-                <div class="subtitle" style="font-size: 18px; margin-top: 30px;">
-                    📅 出发日期: 2026年8月21日<br>
-                    👧 祝贝贝同学吃啥都不长称还玩的开心！
-                </div>
-                <div class="info-grid" style="margin-top: 40px;">
-                    <div class="info-card" style="cursor:pointer;" onclick="goToSlide('taichung-slide')">
-                        <h3>🏙️ 台中 待定 </h3>
-                        <p style="font-size: 16px; margin-top: 10px;">1-2天 | 文艺清新</p>
-                    </div>
-                    <div class="info-card" style="cursor:pointer;" onclick="goToSlide('tainan-slide')">
-                        <h3>🏛️ 台南</h3>
-                        <p style="font-size: 16px; margin-top: 10px;">2-3天 | 古城美食</p>
-                    </div>
-                    <div class="info-card" style="cursor:pointer;" onclick="goToSlide('kaohsiung-slide')">
-                        <h3>🌊 高雄</h3>
-                        <p style="font-size: 16px; margin-top: 10px;">1天 | 港都风情</p>
-                    </div>
-                </div>
-                <div style="text-align: center; margin-top: 40px;">
-                    <button onclick="scrollToNext()">开始旅程 →</button>
-                </div>
+      <!-- 封面页 -->
+      <div class="slide">
+        <div class="slide-content">
+          <h1>🌸 台湾中南部旅游攻略 🌸</h1>
+          <div class="subtitle">台中 · 台南 · 高雄</div>
+          <div class="subtitle" style="font-size: 18px; margin-top: 30px">
+            📅 出发日期: 2026年8月21日<br />
+            👧 祝贝贝同学玩的开心！
+          </div>
+          <div class="info-grid" style="margin-top: 40px">
+            <div
+              class="info-card"
+              style="cursor: pointer"
+              onclick="goToSlide('taichung-slide')"
+            >
+              <h3>🏙️ 台中 <span class="card-arrow">→</span></h3>
+              <p style="font-size: 16px; margin-top: 10px">1-2天 | 文艺清新</p>
             </div>
-        </div>
-
-        <!-- 地图页 -->
-        <div class="slide" id="map-slide">
-            <div class="slide-content">
-                <h2>🗺️ 景点地图总览</h2>
-                <p style="margin-bottom: 15px; color: #666;">点击地图标记查看景点详情，可放大缩小和拖动</p>
-                <div id="map"></div>
-                <div class="info-card" style="margin-top: 20px;">
-                    <h3>📍 景点分布</h3>
-                    <ul style="font-size: 14px;">
-                        <li><strong style="color: #ff6b6b;">台中景点</strong> - 市区集中，方便游览</li>
-                        <li><strong style="color: #4ecdc4;">台南景点</strong> - 古城区+安平区</li>
-                        <li><strong style="color: #667eea;">高雄景点</strong> - 沿海港都分布</li>
-                    </ul>
-                </div>
+            <div
+              class="info-card"
+              style="cursor: pointer"
+              onclick="goToSlide('tainan-slide')"
+            >
+              <h3>🏛️ 台南 <span class="card-arrow">→</span></h3>
+              <p style="font-size: 16px; margin-top: 10px">2-3天 | 古城美食</p>
             </div>
-        </div>
-
-        <!-- 交通页 -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>🚄 交通信息</h2>
-                <h3>台北 → 台中</h3>
-                <div class="info-card">
-                    <p>🚄 <strong>高铁：</strong>约1小时，票价700台币</p>
-                    <p>🚌 <strong>客运：</strong>约2.5小时，票价260台币</p>
-                    <p style="color: #667eea; margin-top: 10px;">💡 推荐搭乘高铁</p>
-                </div>
-                <h3>台中 → 台南</h3>
-                <div class="info-card">
-                    <p>🚄 <strong>高铁：</strong>约50分钟，票价400台币</p>
-                    <p>🚂 <strong>台铁：</strong>约2小时，票价250台币</p>
-                </div>
-                <h3>台南 → 高雄</h3>
-                <div class="info-card">
-                    <p>🚄 <strong>高铁：</strong>约20分钟，票价200台币</p>
-                    <p>🚇 <strong>台铁：</strong>约40分钟，票价110台币</p>
-                </div>
-                <div class="warning">
-                    <strong>⚠️ 温馨提示：</strong>
-                    <ul>
-                        <li>建议提前在台湾高铁官网购票</li>
-                        <li>早鸟优惠：提前28天6.5折起</li>
-                        <li>市内交通推荐Uber或租机车</li>
-                        <li>建议办理悠游卡通用</li>
-                    </ul>
-                </div>
+            <div
+              class="info-card"
+              style="cursor: pointer"
+              onclick="goToSlide('kaohsiung-slide')"
+            >
+              <h3>🌊 高雄 <span class="card-arrow">→</span></h3>
+              <p style="font-size: 16px; margin-top: 10px">1天 | 港都风情</p>
             </div>
+          </div>
+          <div style="text-align: center; margin-top: 40px">
+            <button onclick="scrollToNext()">开始旅程 →</button>
+          </div>
         </div>
+      </div>
 
-        <!-- 天气页 -->
-        <div class="slide">
-            <div class="slide-content">
-                <h2>🌧️ 天气信息（8月21-24日）</h2>
-                <div class="info-grid">
-                    <div class="info-card">
-                        <h3>台中</h3>
-                        <p style="font-size: 32px; margin: 15px 0;">🌧️ 23-32°C</p>
-                        <p>多雨，8/21-23 大雨/雷阵雨，24日转多云</p>
-                        <p style="margin-top: 10px; color: #666;">出门带伞，午后对流强</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>台南</h3>
-                        <p style="font-size: 32px; margin: 15px 0;">🌧️ 24-32°C</p>
-                        <p>降雨明显，8/21 大雨转小雨，23日转多云</p>
-                        <p style="margin-top: 10px; color: #666;">备雨具，雨后路面湿滑</p>
-                    </div>
-                    <div class="info-card">
-                        <h3>高雄</h3>
-                        <p style="font-size: 32px; margin: 15px 0;">🌧️ 25-32°C</p>
-                        <p>降雨明显，8/21 可能暴雨，22-23日中雨转小雨</p>
-                        <p style="margin-top: 10px; color: #666;">留意大雨特报，海边注意安全</p>
-                    </div>
-                </div>
-                <div class="warning">
-                    <strong>🌧️ 穿搭与雨具提醒：</strong>
-                    <ul>
-                        <li>8/21-23 中南部多雨，务必带折叠伞或轻便雨衣</li>
-                        <li>雨天体感略凉，薄外套备一件</li>
-                        <li>鞋子选防滑、可碰水的（避免白鞋）</li>
-                        <li>出门前查看中央气象署最新豪雨特报</li>
-                    </ul>
-                </div>
-                <div class="photo-tip">
-                    <strong>📸 拍出好看的照片必需：</strong>
-                    <ul>
-                        <li>沈贝庭</li>
-                        <li>开心的沈贝庭</li>
-                        <li>漂亮的沈贝庭</li>
-                        <li>甜美的沈贝庭</li>
-                        <li>沈贝庭喜欢的裙子</li>
-                    </ul>
-                </div>
+      <!-- 地图页 -->
+      <div class="slide" id="map-slide">
+        <div class="slide-content">
+          <h2>🗺️ 景点地图总览</h2>
+          <p style="margin-bottom: 15px; color: #666">
+            点击地图标记查看景点详情，可放大缩小和拖动
+          </p>
+          <div id="map"></div>
+          <div class="info-card" style="margin-top: 20px">
+            <h3>📍 景点分布</h3>
+            <ul style="font-size: 14px">
+              <li>
+                <strong style="color: #ff6b6b">台中景点</strong> -
+                市区集中，方便游览
+              </li>
+              <li>
+                <strong style="color: #4ecdc4">台南景点</strong> - 古城区+安平区
+              </li>
+              <li>
+                <strong style="color: #667eea">高雄景点</strong> - 沿海港都分布
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 交通页 -->
+      <div class="slide">
+        <div class="slide-content">
+          <h2>🚄 交通信息</h2>
+          <h3>台北 → 台中</h3>
+          <div class="info-card">
+            <p>🚄 <strong>高铁：</strong>约1小时，票价700台币</p>
+            <p>🚌 <strong>客运：</strong>约2.5小时，票价260台币</p>
+            <p style="color: #667eea; margin-top: 10px">💡 推荐搭乘高铁</p>
+          </div>
+          <h3>台中 → 台南</h3>
+          <div class="info-card">
+            <p>🚄 <strong>高铁：</strong>约50分钟，票价400台币</p>
+            <p>🚂 <strong>台铁：</strong>约2小时，票价250台币</p>
+          </div>
+          <h3>台南 → 高雄</h3>
+          <div class="info-card">
+            <p>🚄 <strong>高铁：</strong>约20分钟，票价200台币</p>
+            <p>🚇 <strong>台铁：</strong>约40分钟，票价110台币</p>
+          </div>
+          <div class="warning">
+            <strong>⚠️ 温馨提示：</strong>
+            <ul>
+              <li>建议提前在台湾高铁官网购票</li>
+              <li>早鸟优惠：提前28天6.5折起</li>
+              <li>市内交通推荐Uber或租机车</li>
+              <li>建议办理悠游卡通用</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- 天气页 -->
+      <div class="slide">
+        <div class="slide-content">
+          <h2>🌧️ 天气信息（8月21-24日）</h2>
+          <div class="info-grid">
+            <div class="info-card">
+              <h3>台中</h3>
+              <p style="font-size: 32px; margin: 15px 0">🌧️ 23-32°C</p>
+              <p>多雨，8/21-23 大雨/雷阵雨，24日转多云</p>
+              <p style="margin-top: 10px; color: #666">出门带伞，午后对流强</p>
             </div>
-        </div>
-
-        <!-- 台中景点 -->
-        <div class="slide" id="taichung-slide">
-            <div class="slide-content">
-                <h2>🏙️ 台中必游景点</h2>
-                <div class="spot-list">
-                    <div class="spot-item">
-                        <img src="images/台中/台中%20国家歌剧院.jpg" 
-                             class="spot-img" alt="国家歌剧院" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=国家歌剧院'">
-                        <h3>📚 国家歌剧院</h3>
-                        <p><strong>特色：</strong>伊东丰雄设计的曲面建筑</p>
-                        <div class="photo-tip">
-                            <strong>📸 拍照点：</strong>1F大厅仰拍、户外水池倒影、6F空中花园
-                        </div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：1-1.5小时</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 台中国家歌剧院" 
-                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/台中国家歌剧院/" 
-                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=24.1630,120.6387" 
-                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-
-                    <div class="spot-item">
-                        <img src="images/台中/台中%20审计新村.jpg" 
-                             class="spot-img" alt="审计新村" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=审计新村'">
-                        <h3>🌿 审计新村</h3>
-                        <p><strong>特色：</strong>文创聚落，网红咖啡店</p>
-                        <div class="photo-tip">
-                            <strong>📸 拍照点：</strong>彩色货柜屋、文艺小店、涂鸦墙
-                        </div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：2小时</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 台中审计新村" 
-                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/审计新村/" 
-                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=24.1408,120.6818" 
-                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-
-                    <div class="spot-item">
-                        <img src="images/台中/台中%20彩虹眷村.jpg" 
-                             class="spot-img" alt="彩虹眷村" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=彩虹眷村'">
-                        <h3>🌈 彩虹眷村</h3>
-                        <p><strong>特色：</strong>彩虹爷爷手绘的梦幻村落</p>
-                        <div class="photo-tip">
-                            <strong>📸 拍照点：</strong>彩色墙面全身照（超出片！）
-                        </div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：1小时</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 台中彩虹眷村" 
-                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/彩虹眷村/" 
-                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=24.1360,120.6177" 
-                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-
-                    <div class="spot-item">
-                        <div class="spot-gallery">
-                            <div class="gallery-track">
-                                <img src="images/台中/台中%20逢甲夜市.jpg"
-                                     class="spot-img" alt="逢甲夜市" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=逢甲夜市'">
-                                <img src="images/台中/台中%20逢甲夜市%202.jpg"
-                                     class="spot-img" alt="逢甲夜市 2" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=逢甲夜市2'">
-                            </div>
-                            <div class="gallery-dots">
-                                <span class="dot active"></span>
-                                <span class="dot"></span>
-                            </div>
-                        </div>
-                        <h3>🌃 逢甲夜市</h3>
-                        <p><strong>特色：</strong>台中最大夜市</p>
-                        <div class="photo-tip">
-                            <strong>📸 拍照点：</strong>霓虹灯招牌、美食近拍
-                        </div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：2-3小时</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 逢甲夜市" 
-                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/逢甲夜市/" 
-                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=24.1797,120.6450" 
-                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-                    <div class="spot-item">
-                        <img src="images/台中/台中%20宫原眼科.jpg"
-                             class="spot-img" alt="宫原眼科" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=宫原眼科'">
-                        <h3>🍨 宫原眼科</h3>
-                        <p><strong>特色：</strong>百年药局改建的冰淇淋名店</p>
-                        <div class="photo-tip">
-                            <strong>📸 拍照点：</strong>复古药柜装潢、冰淇淋塔
-                        </div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：30分钟-1小时</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 台中宫原眼科"
-                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/宫原眼科/"
-                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=24.1378,120.6835"
-                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-                </div>
-                <h3>🍴 台中必吃美食</h3>
-                <div class="food-item">
-                    <strong>📍 逢甲夜市：</strong>大肠包小肠、章鱼小丸子、黄金右腿
-                </div>
-                <div class="food-item">
-                    <strong>📍 宫原眼科：</strong>冰淇淋、凤梨酥（必打卡）
-                </div>
+            <div class="info-card">
+              <h3>台南</h3>
+              <p style="font-size: 32px; margin: 15px 0">🌧️ 24-32°C</p>
+              <p>降雨明显，8/21 大雨转小雨，23日转多云</p>
+              <p style="margin-top: 10px; color: #666">备雨具，雨后路面湿滑</p>
             </div>
-        </div>
-
-        <!-- 台南景点 -->
-        <div class="slide" id="tainan-slide">
-            <div class="slide-content">
-                <h2>🏛️ 台南必游景点</h2>
-                <div class="spot-list">
-                    <div class="spot-item">
-                        <div class="spot-gallery">
-                            <div class="gallery-track">
-                                <img src="images/台南/台南%20赤崁楼.jpg" class="spot-img" alt="赤崁楼" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=赤崁楼'">
-                                <img src="images/台南/台南%20赤坎楼%202.jpg" class="spot-img" alt="赤崁楼 2" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=赤崁楼 2'">
-                            </div>
-                            <div class="gallery-dots">
-                                <span class="dot active"></span>
-                                <span class="dot"></span>
-                            </div>
-                        </div>
-                        <h3>🏰 赤崁楼</h3>
-                        <p><strong>特色：</strong>台南最重要古迹</p>
-                        <div class="photo-tip"><strong>📸 拍照点：</strong>红砖城楼、庭院池塘</div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：1小时</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 台南赤崁楼" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/赤崁楼/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=22.9974,120.2025" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-                    <div class="spot-item">
-                        <img src="images/台南/台南%20神农街%20.jpg" class="spot-img" alt="神农街" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=神农街'">
-                        <h3>🛍️ 神农街</h3>
-                        <p><strong>特色：</strong>台南最美老街</p>
-                        <div class="photo-tip"><strong>📸 拍照点：</strong>夜晚红灯笼街景</div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：1.5小时</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 台南神农街" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/神农街/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=22.9976,120.1965" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-                    <div class="spot-item">
-                        <img src="images/台南/台南%20安平古堡.jpg" class="spot-img" alt="安平古堡" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=安平古堡'">
-                        <h3>🏛️ 安平古堡</h3>
-                        <p><strong>特色：</strong>台湾最古老城堡</p>
-                        <div class="photo-tip"><strong>📸 拍照点：</strong>城堡全景、瞭望台</div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：1.5小时</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 安平古堡" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/安平古堡/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=23.0013,120.1606" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-                    <div class="spot-item">
-                        <div class="spot-gallery">
-                            <div class="gallery-track">
-                                <img src="images/台南/台南%20奇美博物馆%201%20.jpg" class="spot-img" alt="奇美博物馆" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=奇美博物馆'">
-                                <img src="images/台南/台南%20奇美博物馆%202.jpg" class="spot-img" alt="奇美博物馆 2" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=奇美博物馆 2'">
-                                <img src="images/台南/台南%20奇美博物馆%203.jpg" class="spot-img" alt="奇美博物馆 3" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=奇美博物馆 3'">
-                            </div>
-                            <div class="gallery-dots">
-                                <span class="dot active"></span>
-                                <span class="dot"></span>
-                                <span class="dot"></span>
-                            </div>
-                        </div>
-                        <h3>🎨 奇美博物馆</h3>
-                        <p><strong>特色：</strong>欧式宫殿建筑</p>
-                        <div class="photo-tip"><strong>📸 拍照点：</strong>太阳喷泉、白色宫殿</div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：2-3小时</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 奇美博物馆" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/奇美博物馆/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=22.9348,120.2261" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-                    <div class="spot-item">
-                        <img src="images/台南/台南%2032唱片行.jpg"
-                             class="spot-img" alt="32唱片行" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=32唱片行'">
-                        <h3>🎵 32唱片行</h3>
-                        <p><strong>特色：</strong>《想见你》拍摄场景·陶艺文创空间</p>
-                        <div class="photo-tip">
-                            <strong>📸 拍照点：</strong>复古西药房老屋、唱片墙
-                        </div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：30分钟-1小时</p>
-                        <p style="margin-top: 5px;">🕑 营业：14:00-19:00（周日一二休息）</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 台南32唱片行"
-                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/32唱片行/"
-                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=22.991688,120.20749"
-                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-                    <div class="spot-item">
-                        <div class="spot-gallery">
-                            <div class="gallery-track">
-                                <img src="images/台南/台南%20阿堂咸粥%201.jpg" class="spot-img" alt="阿堂咸粥" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=阿堂咸粥'">
-                                <img src="images/台南/台南%20阿堂咸粥%202%20.jpg" class="spot-img" alt="阿堂咸粥 2" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=阿堂咸粥 2'">
-                            </div>
-                            <div class="gallery-dots">
-                                <span class="dot active"></span>
-                                <span class="dot"></span>
-                            </div>
-                        </div>
-                        <h3>🥣 阿堂咸粥</h3>
-                        <p><strong>特色：</strong>台南经典早餐·土魠鱼咸粥</p>
-                        <div class="photo-tip">
-                            <strong>📸 拍照点：</strong>地道摊位、排队人潮
-                        </div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：30分钟</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 阿堂咸粥"
-                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/阿堂咸粥/"
-                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=22.9905,120.1968"
-                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-
-                    <div class="spot-item">
-                        <div class="spot-gallery">
-                            <div class="gallery-track">
-                                <img src="images/台南/台南%20文章牛肉汤%201.jpg" class="spot-img" alt="文章牛肉汤" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=文章牛肉汤'">
-                                <img src="images/台南/台南%20文章牛肉汤%202.jpg" class="spot-img" alt="文章牛肉汤 2" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=文章牛肉汤 2'">
-                            </div>
-                            <div class="gallery-dots">
-                                <span class="dot active"></span>
-                                <span class="dot"></span>
-                            </div>
-                        </div>
-                        <h3>🍲 文章牛肉汤</h3>
-                        <p><strong>特色：</strong>现烫牛肉汤·台南必吃</p>
-                        <div class="photo-tip">
-                            <strong>📸 拍照点：</strong>热气腾腾的牛肉汤
-                        </div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：30分钟</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 文章牛肉汤"
-                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/文章牛肉汤/"
-                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=22.9896,120.1971"
-                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-
-                    <div class="spot-item">
-                        <div class="spot-gallery">
-                            <div class="gallery-track">
-                                <img src="images/台南/台南%20度小月担仔面%201.jpg" class="spot-img" alt="度小月担仔面" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=度小月担仔面'">
-                                <img src="images/台南/台南%20度小月担仔面%202.jpg" class="spot-img" alt="度小月担仔面 2" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=度小月担仔面 2'">
-                            </div>
-                            <div class="gallery-dots">
-                                <span class="dot active"></span>
-                                <span class="dot"></span>
-                            </div>
-                        </div>
-                        <h3>🍜 度小月担仔面</h3>
-                        <p><strong>特色：</strong>百年老店·担仔面始祖</p>
-                        <div class="photo-tip">
-                            <strong>📸 拍照点：</strong>复古店面、红灯笼
-                        </div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：30分钟</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 度小月担仔面"
-                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/度小月担仔面/"
-                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=22.9919,120.1974"
-                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-
-                    <div class="spot-item">
-                        <img src="images/台南/台南%20周氏虾卷.jpg"
-                             class="spot-img" alt="周氏虾卷" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=周氏虾卷'">
-                        <h3>🍤 周氏虾卷</h3>
-                        <p><strong>特色：</strong>安平在地虾卷老店</p>
-                        <div class="photo-tip">
-                            <strong>📸 拍照点：</strong>现炸虾卷
-                        </div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：30分钟</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 周氏虾卷"
-                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/周氏虾卷/"
-                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=23.0018,120.1605"
-                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-                    <div class="spot-item">
-                        <div class="spot-gallery">
-                            <div class="gallery-track">
-                                <img src="images/台南/台南冰乡%201%20%281%29.jpg" class="spot-img" alt="冰鄉" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=冰鄉'">
-                                <img src="images/台南/台南冰乡%202.jpg" class="spot-img" alt="冰鄉 2" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=冰鄉 2'">
-                            </div>
-                            <div class="gallery-dots">
-                                <span class="dot active"></span>
-                                <span class="dot"></span>
-                            </div>
-                        </div>
-                        <h3>🍧 冰鄉</h3>
-                        <p><strong>特色：</strong>40年老字号·芒果冰/草莓冰</p>
-                        <div class="photo-tip">
-                            <strong>📸 拍照点：</strong>满到溢出来的水果冰
-                        </div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：30分钟-1小时</p>
-                        <p style="margin-top: 5px;">🕑 营业：12:00-20:00（夏季芒果冰可能提前售完）</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 台南冰鄉"
-                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/冰鄉/"
-                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=22.9960,120.2045"
-                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-                </div>
-                <h3>🍴 台南必吃美食</h3>
-                <div class="food-item"><strong>📍 早餐：</strong>阿堂咸粥、文章牛肉汤</div>
-                <div class="food-item"><strong>📍 午餐：</strong>度小月担仔面、周氏虾卷</div>
+            <div class="info-card">
+              <h3>高雄</h3>
+              <p style="font-size: 32px; margin: 15px 0">🌧️ 25-32°C</p>
+              <p>降雨明显，8/21 可能暴雨，22-23日中雨转小雨</p>
+              <p style="margin-top: 10px; color: #666">
+                留意大雨特报，海边注意安全
+              </p>
             </div>
+          </div>
+          <div class="warning">
+            <strong>🌧️ 穿搭与雨具提醒：</strong>
+            <ul>
+              <li>8/21-23 中南部多雨，务必带折叠伞或轻便雨衣</li>
+              <li>雨天体感略凉，薄外套备一件</li>
+              <li>鞋子选防滑、可碰水的（避免白鞋）</li>
+              <li>出门前查看中央气象署最新豪雨特报</li>
+            </ul>
+          </div>
+          <div class="photo-tip">
+            <strong>📸 拍出好看的照片必需：</strong>
+            <ul>
+              <li>沈贝庭</li>
+              <li>开心的沈贝庭</li>
+              <li>漂亮的沈贝庭</li>
+              <li>甜美的沈贝庭</li>
+              <li>沈贝庭喜欢的裙子</li>
+            </ul>
+          </div>
         </div>
+      </div>
 
-        <!-- 高雄景点 -->
-        <div class="slide" id="kaohsiung-slide">
-            <div class="slide-content">
-                <h2>🌊 高雄必游景点</h2>
-                <div class="spot-list">
-                    <div class="spot-item">
-                        <img src="https://images.unsplash.com/photo-1524168948095-0e628393b60f?w=400&h=300&fit=crop" class="spot-img" alt="美丽岛站" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=美丽岛站'">
-                        <h3>🚇 美丽岛捷运站</h3>
-                        <p><strong>特色：</strong>世界最美地铁站</p>
-                        <div class="photo-tip"><strong>📸 拍照点：</strong>仰拍光之穹顶</div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：30分钟</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 高雄美丽岛站" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/美丽岛站/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=22.6314,120.3020" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-                    <div class="spot-item">
-                        <img src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop" class="spot-img" alt="驳二" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=驳二艺术特区'">
-                        <h3>🏛️ 驳二艺术特区</h3>
-                        <p><strong>特色：</strong>文创艺术聚落</p>
-                        <div class="photo-tip"><strong>📸 拍照点：</strong>大型艺术装置、涂鸦墙</div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：2-3小时</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 高雄驳二" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/驳二艺术特区/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=22.6202,120.2815" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-                    <div class="spot-item">
-                        <img src="https://images.unsplash.com/photo-1562979314-bee7453e911c?w=400&h=300&fit=crop" class="spot-img" alt="西子湾" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=西子湾'">
-                        <h3>🌉 西子湾</h3>
-                        <p><strong>特色：</strong>海景夕阳</p>
-                        <div class="photo-tip"><strong>📸 拍照点：</strong>日落剪影、海边礁石</div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：2小时</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 高雄西子湾" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/西子湾/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=22.6234,120.2658" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-                    <div class="spot-item">
-                        <img src="https://images.unsplash.com/photo-1548013146-72479768bada?w=400&h=300&fit=crop" class="spot-img" alt="龙虎塔" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=龙虎塔'">
-                        <h3>⛩️ 龙虎塔</h3>
-                        <p><strong>特色：</strong>莲池潭标志景点</p>
-                        <div class="photo-tip"><strong>📸 拍照点：</strong>双塔倒影、龙虎口</div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：1小时</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 高雄龙虎塔" target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/龙虎塔/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=22.6832,120.2938" target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-                    <div class="spot-item">
-                        <img src="https://images.unsplash.com/photo-1555126634-323283e090fa?w=400&h=300&fit=crop"
-                             class="spot-img" alt="六合夜市" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=六合夜市'">
-                        <h3>🍢 六合夜市</h3>
-                        <p><strong>特色：</strong>高雄最知名观光夜市</p>
-                        <div class="photo-tip">
-                            <strong>📸 拍照点：</strong>木瓜牛奶、夜市招牌
-                        </div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：1-2小时</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 高雄六合夜市"
-                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/六合夜市/"
-                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=22.6330,120.3019"
-                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-
-                    <div class="spot-item">
-                        <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop"
-                             class="spot-img" alt="丹丹汉堡" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=丹丹汉堡'">
-                        <h3>🍔 丹丹汉堡</h3>
-                        <p><strong>特色：</strong>南台湾限定速食（连锁，市区多处）</p>
-                        <div class="photo-tip">
-                            <strong>📸 拍照点：</strong>招牌套餐、限定饮料
-                        </div>
-                        <p style="margin-top: 10px;">⏰ 建议停留：30分钟</p>
-                        <div class="social-links">
-                            <a href="https://www.baidu.com/s?wd=小红书 高雄丹丹汉堡"
-                               target="_blank" class="social-btn xhs-btn">📕 小红书</a>
-                            <a href="https://www.instagram.com/explore/tags/丹丹汉堡/"
-                               target="_blank" class="social-btn ins-btn">📷 Instagram</a>
-                            <a href="https://maps.google.com/?q=22.6379,120.3020"
-                               target="_blank" class="social-btn map-btn">🗺️ 导航</a>
-                        </div>
-                    </div>
-                </div>
-                <h3>🍴 高雄必吃美食</h3>
-                <div class="food-item"><strong>📍 六合夜市：</strong>郑老牌木瓜牛奶、海产粥</div>
-                <div class="food-item"><strong>📍 市区：</strong>丹丹汉堡（高雄限定）</div>
+      <!-- 台中景点 -->
+      <div class="slide" id="taichung-slide">
+        <div class="slide-content">
+          <h2>🏙️ 台中必游景点</h2>
+          <div class="spot-list">
+            <div class="spot-item">
+              <img
+                src="images/台中/台中%20国家歌剧院.jpg"
+                class="spot-img"
+                alt="国家歌剧院"
+                onerror="
+                  this.src =
+                    'https://via.placeholder.com/400x300/667eea/ffffff?text=国家歌剧院'
+                "
+              />
+              <h3>📚 国家歌剧院</h3>
+              <p><strong>特色：</strong>伊东丰雄设计的曲面建筑</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>1F大厅仰拍、户外水池倒影、6F空中花园
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：1-1.5小时</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 台中国家歌剧院"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/台中国家歌剧院/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=24.1630,120.6387"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
             </div>
-        </div>
 
-        <!-- 结束页 -->
-        <div class="slide">
-            <div class="slide-content" style="text-align: center;">
-                <h1>🌸 祝你旅途愉快！🌸</h1>
-                <p style="font-size: 22px; margin: 40px 0; color: #666; line-height: 1.8;">
-                    台湾很安全，人也很友善<br>
-                    放松心情，享受美食美景<br>
-                    拍出最美的照片！
-                </p>
-                <div class="info-card" style="max-width: 600px; margin: 40px auto;">
-                    <h3>🎁 旅行清单</h3>
-                    <ul style="text-align: left;">
-                        <li>证件不能忘了带噢！</li>
-                        <li>手机要拿好！keep in touch</li>
-                        <li>然后就是开心！</li>
-                        <li>KEEP CHILL！</li>
-                        <li>还是开心！</li>
-                        <li>噢 还有一个健康放开的胃！</li>
-                        <li>嗯 要开开心心！</li>
-                        <li>噢还有带着在线上的小川 恳求.jpg</li>
-                    </ul>
-                </div>
+            <div class="spot-item">
+              <img
+                src="images/台中/台中%20审计新村.jpg"
+                class="spot-img"
+                alt="审计新村"
+                onerror="
+                  this.src =
+                    'https://via.placeholder.com/400x300/667eea/ffffff?text=审计新村'
+                "
+              />
+              <h3>🌿 审计新村</h3>
+              <p><strong>特色：</strong>文创聚落，网红咖啡店</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>彩色货柜屋、文艺小店、涂鸦墙
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：2小时</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 台中审计新村"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/审计新村/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=24.1408,120.6818"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
             </div>
+
+            <div class="spot-item">
+              <img
+                src="images/台中/台中%20彩虹眷村.jpg"
+                class="spot-img"
+                alt="彩虹眷村"
+                onerror="
+                  this.src =
+                    'https://via.placeholder.com/400x300/667eea/ffffff?text=彩虹眷村'
+                "
+              />
+              <h3>🌈 彩虹眷村</h3>
+              <p><strong>特色：</strong>彩虹爷爷手绘的梦幻村落</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>彩色墙面全身照（超出片！）
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：1小时</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 台中彩虹眷村"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/彩虹眷村/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=24.1360,120.6177"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+
+            <div class="spot-item">
+              <div class="spot-gallery">
+                <div class="gallery-track">
+                  <img
+                    src="images/台中/台中%20逢甲夜市.jpg"
+                    class="spot-img"
+                    alt="逢甲夜市"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/400x300/667eea/ffffff?text=逢甲夜市'
+                    "
+                  />
+                  <img
+                    src="images/台中/台中%20逢甲夜市%202.jpg"
+                    class="spot-img"
+                    alt="逢甲夜市 2"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/400x300/667eea/ffffff?text=逢甲夜市2'
+                    "
+                  />
+                </div>
+                <div class="gallery-dots">
+                  <span class="dot active"></span>
+                  <span class="dot"></span>
+                </div>
+              </div>
+              <h3>🌃 逢甲夜市</h3>
+              <p><strong>特色：</strong>台中最大夜市</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>霓虹灯招牌、美食近拍
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：2-3小时</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 逢甲夜市"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/逢甲夜市/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=24.1797,120.6450"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+            <div class="spot-item">
+              <img
+                src="images/台中/台中%20宫原眼科.jpg"
+                class="spot-img"
+                alt="宫原眼科"
+                onerror="
+                  this.src =
+                    'https://via.placeholder.com/400x300/667eea/ffffff?text=宫原眼科'
+                "
+              />
+              <h3>🍨 宫原眼科</h3>
+              <p><strong>特色：</strong>百年药局改建的冰淇淋名店</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>复古药柜装潢、冰淇淋塔
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：30分钟-1小时</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 台中宫原眼科"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/宫原眼科/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=24.1378,120.6835"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+          </div>
+          <h3>🍴 台中必吃美食</h3>
+          <div class="food-item">
+            <strong>📍 逢甲夜市：</strong>大肠包小肠、章鱼小丸子、黄金右腿
+          </div>
+          <div class="food-item">
+            <strong>📍 宫原眼科：</strong>冰淇淋、凤梨酥（必打卡）
+          </div>
         </div>
+      </div>
+
+      <!-- 台南景点 -->
+      <div class="slide" id="tainan-slide">
+        <div class="slide-content">
+          <h2>🏛️ 台南必游景点</h2>
+          <div class="spot-list">
+            <div class="spot-item">
+              <div class="spot-gallery">
+                <div class="gallery-track">
+                  <img
+                    src="images/台南/台南%20赤崁楼.jpg"
+                    class="spot-img"
+                    alt="赤崁楼"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/400x300/667eea/ffffff?text=赤崁楼'
+                    "
+                  />
+                  <img
+                    src="images/台南/台南%20赤坎楼%202.jpg"
+                    class="spot-img"
+                    alt="赤崁楼 2"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/400x300/667eea/ffffff?text=赤崁楼 2'
+                    "
+                  />
+                </div>
+                <div class="gallery-dots">
+                  <span class="dot active"></span>
+                  <span class="dot"></span>
+                </div>
+              </div>
+              <h3>🏰 赤崁楼</h3>
+              <p><strong>特色：</strong>台南最重要古迹</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>红砖城楼、庭院池塘
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：1小时</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 台南赤崁楼"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/赤崁楼/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=22.9974,120.2025"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+            <div class="spot-item">
+              <img
+                src="images/台南/台南%20神农街%20.jpg"
+                class="spot-img"
+                alt="神农街"
+                onerror="
+                  this.src =
+                    'https://via.placeholder.com/400x300/667eea/ffffff?text=神农街'
+                "
+              />
+              <h3>🛍️ 神农街</h3>
+              <p><strong>特色：</strong>台南最美老街</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>夜晚红灯笼街景
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：1.5小时</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 台南神农街"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/神农街/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=22.9976,120.1965"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+            <div class="spot-item">
+              <img
+                src="images/台南/台南%20安平古堡.jpg"
+                class="spot-img"
+                alt="安平古堡"
+                onerror="
+                  this.src =
+                    'https://via.placeholder.com/400x300/667eea/ffffff?text=安平古堡'
+                "
+              />
+              <h3>🏛️ 安平古堡</h3>
+              <p><strong>特色：</strong>台湾最古老城堡</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>城堡全景、瞭望台
+              </div>
+              <div class="cc-tip">
+                <strong>😎 小川觉得路过看看就行</strong>
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：1.5小时</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 安平古堡"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/安平古堡/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=23.0013,120.1606"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+            <div class="spot-item">
+              <div class="spot-gallery">
+                <div class="gallery-track">
+                  <img
+                    src="images/台南/台南%20奇美博物馆%201%20.jpg"
+                    class="spot-img"
+                    alt="奇美博物馆"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/400x300/667eea/ffffff?text=奇美博物馆'
+                    "
+                  />
+                  <img
+                    src="images/台南/台南%20奇美博物馆%202.jpg"
+                    class="spot-img"
+                    alt="奇美博物馆 2"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/400x300/667eea/ffffff?text=奇美博物馆 2'
+                    "
+                  />
+                  <img
+                    src="images/台南/台南%20奇美博物馆%203.jpg"
+                    class="spot-img"
+                    alt="奇美博物馆 3"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/400x300/667eea/ffffff?text=奇美博物馆 3'
+                    "
+                  />
+                </div>
+                <div class="gallery-dots">
+                  <span class="dot active"></span>
+                  <span class="dot"></span>
+                  <span class="dot"></span>
+                </div>
+              </div>
+              <h3>🎨 奇美博物馆</h3>
+              <p>
+                <strong>特色：</strong
+                >欧式宫殿建筑，好出片，但距离市区车程近1小时
+              </p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>太阳喷泉、白色宫殿
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：2-3小时</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 奇美博物馆"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/奇美博物馆/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=22.9348,120.2261"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+            <div class="spot-item">
+              <img
+                src="images/台南/台南%2032唱片行.jpg"
+                class="spot-img"
+                alt="32唱片行"
+                onerror="
+                  this.src =
+                    'https://via.placeholder.com/400x300/667eea/ffffff?text=32唱片行'
+                "
+              />
+              <h3>🎵 32唱片行</h3>
+              <p><strong>特色：</strong>《想见你》拍摄场景·陶艺文创空间</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>复古西药房老屋、唱片墙
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：30分钟-1小时</p>
+              <p style="margin-top: 5px">
+                🕑 营业：14:00-19:00（周日一二休息）
+              </p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 台南32唱片行"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/32唱片行/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=22.991688,120.20749"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+            <div class="spot-item">
+              <div class="spot-gallery">
+                <div class="gallery-track">
+                  <img
+                    src="images/台南/台南%20阿堂咸粥%201.jpg"
+                    class="spot-img"
+                    alt="阿堂咸粥"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/400x300/667eea/ffffff?text=阿堂咸粥'
+                    "
+                  />
+                  <img
+                    src="images/台南/台南%20阿堂咸粥%202%20.jpg"
+                    class="spot-img"
+                    alt="阿堂咸粥 2"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/400x300/667eea/ffffff?text=阿堂咸粥 2'
+                    "
+                  />
+                </div>
+                <div class="gallery-dots">
+                  <span class="dot active"></span>
+                  <span class="dot"></span>
+                </div>
+              </div>
+              <h3>🥣 阿堂咸粥</h3>
+              <p><strong>特色：</strong>台南经典早餐·土魠鱼咸粥</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>地道摊位、排队人潮
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：30分钟</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 阿堂咸粥"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/阿堂咸粥/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=22.9905,120.1968"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+
+            <div class="spot-item">
+              <div class="spot-gallery">
+                <div class="gallery-track">
+                  <img
+                    src="images/台南/台南%20文章牛肉汤%201.jpg"
+                    class="spot-img"
+                    alt="文章牛肉汤"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/400x300/667eea/ffffff?text=文章牛肉汤'
+                    "
+                  />
+                  <img
+                    src="images/台南/台南%20文章牛肉汤%202.jpg"
+                    class="spot-img"
+                    alt="文章牛肉汤 2"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/400x300/667eea/ffffff?text=文章牛肉汤 2'
+                    "
+                  />
+                </div>
+                <div class="gallery-dots">
+                  <span class="dot active"></span>
+                  <span class="dot"></span>
+                </div>
+              </div>
+              <h3>🍲 文章牛肉汤</h3>
+              <p><strong>特色：</strong>现烫牛肉汤·台南必吃</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>热气腾腾的牛肉汤
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：30分钟</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 文章牛肉汤"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/文章牛肉汤/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=22.9896,120.1971"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+
+            <div class="spot-item">
+              <div class="spot-gallery">
+                <div class="gallery-track">
+                  <img
+                    src="images/台南/台南%20度小月担仔面%201.jpg"
+                    class="spot-img"
+                    alt="度小月担仔面"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/400x300/667eea/ffffff?text=度小月担仔面'
+                    "
+                  />
+                  <img
+                    src="images/台南/台南%20度小月担仔面%202.jpg"
+                    class="spot-img"
+                    alt="度小月担仔面 2"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/400x300/667eea/ffffff?text=度小月担仔面 2'
+                    "
+                  />
+                </div>
+                <div class="gallery-dots">
+                  <span class="dot active"></span>
+                  <span class="dot"></span>
+                </div>
+              </div>
+              <h3>🍜 度小月担仔面</h3>
+              <p><strong>特色：</strong>百年老店·担仔面始祖</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>复古店面、红灯笼
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：30分钟</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 度小月担仔面"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/度小月担仔面/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=22.9919,120.1974"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+
+            <div class="spot-item">
+              <img
+                src="images/台南/台南%20周氏虾卷.jpg"
+                class="spot-img"
+                alt="周氏虾卷"
+                onerror="
+                  this.src =
+                    'https://via.placeholder.com/400x300/667eea/ffffff?text=周氏虾卷'
+                "
+              />
+              <h3>🍤 周氏虾卷</h3>
+              <p><strong>特色：</strong>安平在地虾卷老店</p>
+              <div class="photo-tip"><strong>📸 拍照点：</strong>现炸虾卷</div>
+              <p style="margin-top: 10px">⏰ 建议停留：30分钟</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 周氏虾卷"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/周氏虾卷/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=23.0018,120.1605"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+            <div class="spot-item">
+              <div class="spot-gallery">
+                <div class="gallery-track">
+                  <img
+                    src="images/台南/台南冰乡%201%20%281%29.jpg"
+                    class="spot-img"
+                    alt="冰鄉"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/400x300/667eea/ffffff?text=冰鄉'
+                    "
+                  />
+                  <img
+                    src="images/台南/台南冰乡%202.jpg"
+                    class="spot-img"
+                    alt="冰鄉 2"
+                    onerror="
+                      this.src =
+                        'https://via.placeholder.com/400x300/667eea/ffffff?text=冰鄉 2'
+                    "
+                  />
+                </div>
+                <div class="gallery-dots">
+                  <span class="dot active"></span>
+                  <span class="dot"></span>
+                </div>
+              </div>
+              <h3>🍧 冰鄉</h3>
+              <p><strong>特色：</strong>40年老字号·芒果冰/草莓冰</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>满到溢出来的水果冰
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：30分钟-1小时</p>
+              <p style="margin-top: 5px">
+                🕑 营业：12:00-20:00（夏季芒果冰可能提前售完）
+              </p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 台南冰鄉"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/冰鄉/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=22.9960,120.2045"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+          </div>
+          <h3>🍴 台南必吃美食</h3>
+          <div class="food-item">
+            <strong>📍 早餐：</strong>阿堂咸粥、文章牛肉汤
+          </div>
+          <div class="food-item">
+            <strong>📍 午餐：</strong>度小月担仔面、周氏虾卷
+          </div>
+        </div>
+      </div>
+
+      <!-- 高雄景点 -->
+      <div class="slide" id="kaohsiung-slide">
+        <div class="slide-content">
+          <h2>🌊 高雄必游景点</h2>
+          <div class="spot-list">
+            <div class="spot-item">
+              <img
+                src="https://images.unsplash.com/photo-1524168948095-0e628393b60f?w=400&h=300&fit=crop"
+                class="spot-img"
+                alt="美丽岛站"
+                onerror="
+                  this.src =
+                    'https://via.placeholder.com/400x300/667eea/ffffff?text=美丽岛站'
+                "
+              />
+              <h3>🚇 美丽岛捷运站</h3>
+              <p><strong>特色：</strong>世界最美地铁站</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>仰拍光之穹顶
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：30分钟</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 高雄美丽岛站"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/美丽岛站/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=22.6314,120.3020"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+            <div class="spot-item">
+              <img
+                src="https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop"
+                class="spot-img"
+                alt="驳二"
+                onerror="
+                  this.src =
+                    'https://via.placeholder.com/400x300/667eea/ffffff?text=驳二艺术特区'
+                "
+              />
+              <h3>🏛️ 驳二艺术特区</h3>
+              <p><strong>特色：</strong>文创艺术聚落</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>大型艺术装置、涂鸦墙
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：2-3小时</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 高雄驳二"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/驳二艺术特区/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=22.6202,120.2815"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+            <div class="spot-item">
+              <img
+                src="https://images.unsplash.com/photo-1562979314-bee7453e911c?w=400&h=300&fit=crop"
+                class="spot-img"
+                alt="西子湾"
+                onerror="
+                  this.src =
+                    'https://via.placeholder.com/400x300/667eea/ffffff?text=西子湾'
+                "
+              />
+              <h3>🌉 西子湾</h3>
+              <p><strong>特色：</strong>海景夕阳</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>日落剪影、海边礁石
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：2小时</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 高雄西子湾"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/西子湾/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=22.6234,120.2658"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+            <div class="spot-item">
+              <img
+                src="https://images.unsplash.com/photo-1548013146-72479768bada?w=400&h=300&fit=crop"
+                class="spot-img"
+                alt="龙虎塔"
+                onerror="
+                  this.src =
+                    'https://via.placeholder.com/400x300/667eea/ffffff?text=龙虎塔'
+                "
+              />
+              <h3>⛩️ 龙虎塔</h3>
+              <p><strong>特色：</strong>莲池潭标志景点</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>双塔倒影、龙虎口
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：1小时</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 高雄龙虎塔"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/龙虎塔/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=22.6832,120.2938"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+            <div class="spot-item">
+              <img
+                src="https://images.unsplash.com/photo-1555126634-323283e090fa?w=400&h=300&fit=crop"
+                class="spot-img"
+                alt="六合夜市"
+                onerror="
+                  this.src =
+                    'https://via.placeholder.com/400x300/667eea/ffffff?text=六合夜市'
+                "
+              />
+              <h3>🍢 六合夜市</h3>
+              <p><strong>特色：</strong>高雄最知名观光夜市</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>木瓜牛奶、夜市招牌
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：1-2小时</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 高雄六合夜市"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/六合夜市/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=22.6330,120.3019"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+
+            <div class="spot-item">
+              <img
+                src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop"
+                class="spot-img"
+                alt="丹丹汉堡"
+                onerror="
+                  this.src =
+                    'https://via.placeholder.com/400x300/667eea/ffffff?text=丹丹汉堡'
+                "
+              />
+              <h3>🍔 丹丹汉堡</h3>
+              <p><strong>特色：</strong>南台湾限定速食（连锁，市区多处）</p>
+              <div class="photo-tip">
+                <strong>📸 拍照点：</strong>招牌套餐、限定饮料
+              </div>
+              <p style="margin-top: 10px">⏰ 建议停留：30分钟</p>
+              <div class="social-links">
+                <a
+                  href="https://www.baidu.com/s?wd=小红书 高雄丹丹汉堡"
+                  target="_blank"
+                  class="social-btn xhs-btn"
+                  >📕 小红书</a
+                >
+                <a
+                  href="https://www.instagram.com/explore/tags/丹丹汉堡/"
+                  target="_blank"
+                  class="social-btn ins-btn"
+                  >📷 Instagram</a
+                >
+                <a
+                  href="https://maps.google.com/?q=22.6379,120.3020"
+                  target="_blank"
+                  class="social-btn map-btn"
+                  >🗺️ 导航</a
+                >
+              </div>
+            </div>
+          </div>
+          <h3>🍴 高雄必吃美食</h3>
+          <div class="food-item">
+            <strong>📍 六合夜市：</strong>郑老牌木瓜牛奶、海产粥
+          </div>
+          <div class="food-item">
+            <strong>📍 市区：</strong>丹丹汉堡（高雄限定）
+          </div>
+        </div>
+      </div>
+
+      <!-- 结束页 -->
+      <div class="slide">
+        <div class="slide-content" style="text-align: center">
+          <h1>🌸 祝你旅途愉快！🌸</h1>
+          <p
+            style="
+              font-size: 22px;
+              margin: 40px 0;
+              color: #666;
+              line-height: 1.8;
+            "
+          >
+            台湾很安全，人也很友善<br />
+            放松心情，享受美食美景<br />
+            拍出最美的照片！
+          </p>
+          <div class="info-card" style="max-width: 600px; margin: 40px auto">
+            <h3>🎁 旅行清单</h3>
+            <ul style="text-align: left">
+              <li>证件不能忘了带噢！</li>
+              <li>手机要拿好！keep in touch</li>
+              <li>然后就是开心！</li>
+              <li>KEEP CHILL！</li>
+              <li>还是开心！</li>
+              <li>噢 还有一个健康放开的胃！</li>
+              <li>嗯 要开开心心！</li>
+              <li>噢还有带着在线上的小川 恳求.jpg</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script>
-        const map = L.map("map").setView([23.5, 120.5], 8);
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-            attribution: "OpenStreetMap",
-            maxZoom: 18
-        }).addTo(map);
+      const map = L.map("map").setView([23.5, 120.5], 8);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "OpenStreetMap",
+        maxZoom: 18,
+      }).addTo(map);
 
-        const spots = [
-            {n:"国家歌剧院",c:[24.1630,120.6387]},
-            {n:"审计新村",c:[24.1408,120.6818]},
-            {n:"彩虹眷村",c:[24.1360,120.6177]},
-            {n:"逢甲夜市",c:[24.1797,120.6450]},
-            {n:"赤崁楼",c:[22.9974,120.2025]},
-            {n:"神农街",c:[22.9976,120.1965]},
-            {n:"安平古堡",c:[23.0013,120.1606]},
-            {n:"奇美博物馆",c:[22.9348,120.2261]},
-            {n:"32唱片行",c:[22.991688,120.20749]},
-            {n:"美丽岛站",c:[22.6314,120.3020]},
-            {n:"驳二",c:[22.6202,120.2815]},
-            {n:"西子湾",c:[22.6234,120.2658]},
-            {n:"龙虎塔",c:[22.6832,120.2938]},
-            {n:"宫原眼科",c:[24.1378,120.6835]},
-            {n:"阿堂咸粥",c:[22.9905,120.1968]},
-            {n:"文章牛肉汤",c:[22.9896,120.1971]},
-            {n:"度小月担仔面",c:[22.9919,120.1974]},
-            {n:"周氏虾卷",c:[23.0018,120.1605]},
-            {n:"冰鄉",c:[22.9960,120.2045]},
-            {n:"六合夜市",c:[22.6330,120.3019]},
-            {n:"丹丹汉堡",c:[22.6379,120.3020]}
-        ];
+      const spots = [
+        { n: "国家歌剧院", c: [24.163, 120.6387] },
+        { n: "审计新村", c: [24.1408, 120.6818] },
+        { n: "彩虹眷村", c: [24.136, 120.6177] },
+        { n: "逢甲夜市", c: [24.1797, 120.645] },
+        { n: "赤崁楼", c: [22.9974, 120.2025] },
+        { n: "神农街", c: [22.9976, 120.1965] },
+        { n: "安平古堡", c: [23.0013, 120.1606] },
+        { n: "奇美博物馆", c: [22.9348, 120.2261] },
+        { n: "32唱片行", c: [22.991688, 120.20749] },
+        { n: "美丽岛站", c: [22.6314, 120.302] },
+        { n: "驳二", c: [22.6202, 120.2815] },
+        { n: "西子湾", c: [22.6234, 120.2658] },
+        { n: "龙虎塔", c: [22.6832, 120.2938] },
+        { n: "宫原眼科", c: [24.1378, 120.6835] },
+        { n: "阿堂咸粥", c: [22.9905, 120.1968] },
+        { n: "文章牛肉汤", c: [22.9896, 120.1971] },
+        { n: "度小月担仔面", c: [22.9919, 120.1974] },
+        { n: "周氏虾卷", c: [23.0018, 120.1605] },
+        { n: "冰鄉", c: [22.996, 120.2045] },
+        { n: "六合夜市", c: [22.633, 120.3019] },
+        { n: "丹丹汉堡", c: [22.6379, 120.302] },
+      ];
 
-        spots.forEach(function(s){
-            const marker = L.marker(s.c).addTo(map);
-            marker.bindPopup("<b>"+s.n+"</b><br><a href=https://maps.google.com/?q="+s.c[0]+","+s.c[1]+" target=_blank>导航</a>");
-        });
+      spots.forEach(function (s) {
+        const marker = L.marker(s.c).addTo(map);
+        marker.bindPopup(
+          "<b>" +
+            s.n +
+            "</b><br><a href=https://maps.google.com/?q=" +
+            s.c[0] +
+            "," +
+            s.c[1] +
+            " target=_blank>导航</a>",
+        );
+      });
 
-        function scrollToNext(){
-            document.querySelector(".container").scrollBy({top:window.innerHeight,behavior:"smooth"});
+      function scrollToNext() {
+        document
+          .querySelector(".container")
+          .scrollBy({ top: window.innerHeight, behavior: "smooth" });
+      }
+
+      // 跳转到指定 slide（城市卡片 / 回到地图按钮用）
+      function goToSlide(id) {
+        var slide = document.getElementById(id);
+        var container = document.querySelector(".container");
+        if (!slide || !container) return;
+        var top =
+          slide.getBoundingClientRect().top -
+          container.getBoundingClientRect().top +
+          container.scrollTop;
+        container.scrollTo({ top: top, behavior: "smooth" });
+      }
+
+      document.addEventListener("keydown", function (e) {
+        const c = document.querySelector(".container");
+        if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
+          e.preventDefault();
+          c.scrollBy({ top: window.innerHeight, behavior: "smooth" });
+        } else if (e.key === "ArrowUp" || e.key === "PageUp") {
+          e.preventDefault();
+          c.scrollBy({ top: -window.innerHeight, behavior: "smooth" });
+        }
+      });
+
+      // 平滑滑动手势 - 只在明确上下滑动时翻页，地图区域除外
+      let touchStartY = 0,
+        touchStartX = 0,
+        touchStartTime = 0;
+
+      document.addEventListener(
+        "touchstart",
+        function (e) {
+          // 如果触摸在地图上，不记录（跳过翻页逻辑）
+          if (e.target.closest("#map") || e.target.closest(".spot-gallery"))
+            return;
+
+          touchStartY = e.touches[0].clientY;
+          touchStartX = e.touches[0].clientX;
+          touchStartTime = Date.now();
+        },
+        { passive: true },
+      );
+
+      document.addEventListener(
+        "touchend",
+        function (e) {
+          // 如果触摸在地图上，不执行翻页
+          if (e.target.closest("#map") || e.target.closest(".spot-gallery"))
+            return;
+
+          const touchEndY = e.changedTouches[0].clientY;
+          const touchEndX = e.changedTouches[0].clientX;
+          const touchEndTime = Date.now();
+
+          const diffY = touchStartY - touchEndY;
+          const diffX = Math.abs(touchStartX - touchEndX);
+          const timeDiff = touchEndTime - touchStartTime;
+
+          // 只有快速明确的垂直滑动才翻页（大幅滑动 + 垂直为主 + 快速完成）
+          if (
+            Math.abs(diffY) > 120 &&
+            Math.abs(diffY) > diffX * 2 &&
+            timeDiff < 400
+          ) {
+            const c = document.querySelector(".container");
+            if (diffY > 0) {
+              c.scrollBy({ top: window.innerHeight, behavior: "smooth" });
+            } else {
+              c.scrollBy({ top: -window.innerHeight, behavior: "smooth" });
+            }
+          }
+        },
+        { passive: true },
+      );
+
+      // 图片轮播（逢甲夜市等多图地点）
+      document.querySelectorAll(".spot-gallery").forEach(function (gallery) {
+        const track = gallery.querySelector(".gallery-track");
+        const images = track.querySelectorAll(".spot-img");
+        const dots = gallery.querySelectorAll(".dot");
+        let index = 0;
+
+        function goTo(i) {
+          index = (i + images.length) % images.length;
+          track.style.transform = "translateX(" + -index * 100 + "%)";
+          dots.forEach(function (d, di) {
+            d.classList.toggle("active", di === index);
+          });
         }
 
-        // 跳转到指定 slide（城市卡片 / 回到地图按钮用）
-        function goToSlide(id){
-            var slide = document.getElementById(id);
-            var container = document.querySelector(".container");
-            if (!slide || !container) return;
-            var top = slide.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
-            container.scrollTo({ top: top, behavior: "smooth" });
-        }
-
-        document.addEventListener("keydown",function(e){
-            const c=document.querySelector(".container");
-            if(e.key==="ArrowDown"||e.key==="PageDown"||e.key===" "){
-                e.preventDefault();
-                c.scrollBy({top:window.innerHeight,behavior:"smooth"});
-            }else if(e.key==="ArrowUp"||e.key==="PageUp"){
-                e.preventDefault();
-                c.scrollBy({top:-window.innerHeight,behavior:"smooth"});
-            }
+        dots.forEach(function (dot, di) {
+          dot.addEventListener("click", function () {
+            goTo(di);
+          });
         });
 
-        // 平滑滑动手势 - 只在明确上下滑动时翻页，地图区域除外
-        let touchStartY = 0, touchStartX = 0, touchStartTime = 0;
+        let startX = 0;
+        gallery.addEventListener(
+          "touchstart",
+          function (e) {
+            startX = e.touches[0].clientX;
+          },
+          { passive: true },
+        );
 
-        document.addEventListener('touchstart', function(e) {
-            // 如果触摸在地图上，不记录（跳过翻页逻辑）
-            if (e.target.closest('#map') || e.target.closest('.spot-gallery')) return;
-
-            touchStartY = e.touches[0].clientY;
-            touchStartX = e.touches[0].clientX;
-            touchStartTime = Date.now();
-        }, {passive: true});
-
-        document.addEventListener('touchend', function(e) {
-            // 如果触摸在地图上，不执行翻页
-            if (e.target.closest('#map') || e.target.closest('.spot-gallery')) return;
-
-            const touchEndY = e.changedTouches[0].clientY;
-            const touchEndX = e.changedTouches[0].clientX;
-            const touchEndTime = Date.now();
-
-            const diffY = touchStartY - touchEndY;
-            const diffX = Math.abs(touchStartX - touchEndX);
-            const timeDiff = touchEndTime - touchStartTime;
-
-            // 只有快速明确的垂直滑动才翻页（大幅滑动 + 垂直为主 + 快速完成）
-            if (Math.abs(diffY) > 120 && Math.abs(diffY) > diffX * 2 && timeDiff < 400) {
-                const c = document.querySelector('.container');
-                if (diffY > 0) {
-                    c.scrollBy({top: window.innerHeight, behavior: 'smooth'});
-                } else {
-                    c.scrollBy({top: -window.innerHeight, behavior: 'smooth'});
-                }
+        gallery.addEventListener(
+          "touchend",
+          function (e) {
+            const endX = e.changedTouches[0].clientX;
+            const diff = startX - endX;
+            if (Math.abs(diff) > 40) {
+              goTo(index + (diff > 0 ? 1 : -1));
             }
-        }, {passive: true});
+          },
+          { passive: true },
+        );
+      });
 
-        // 图片轮播（逢甲夜市等多图地点）
-        document.querySelectorAll('.spot-gallery').forEach(function(gallery) {
-            const track = gallery.querySelector('.gallery-track');
-            const images = track.querySelectorAll('.spot-img');
-            const dots = gallery.querySelectorAll('.dot');
-            let index = 0;
+      // 音乐控制
+      const bgMusic = document.getElementById("bgMusic");
+      const musicToggle = document.getElementById("musicToggle");
 
-            function goTo(i) {
-                index = (i + images.length) % images.length;
-                track.style.transform = 'translateX(' + (-index * 100) + '%)';
-                dots.forEach(function(d, di) {
-                    d.classList.toggle('active', di === index);
-                });
+      if (bgMusic && musicToggle) {
+        // 设置音量
+        bgMusic.volume = 0.4;
+
+        let userPaused = false;
+
+        function startMusic() {
+          // 用户主动暂停后，不再自动重启
+          if (bgMusic.paused && !userPaused) {
+            const p = bgMusic.play();
+            if (p !== undefined) {
+              p.then(() => {
+                musicToggle.classList.add("playing");
+                musicToggle.textContent = "🔊";
+                musicToggle.title = "点击暂停音乐";
+              }).catch(() => {
+                // 自动播放被浏览器阻止，保持待点击状态
+                musicToggle.classList.remove("playing");
+                musicToggle.textContent = "🎵";
+                musicToggle.title = "点击播放音乐";
+              });
             }
-
-            dots.forEach(function(dot, di) {
-                dot.addEventListener('click', function() {
-                    goTo(di);
-                });
-            });
-
-            let startX = 0;
-            gallery.addEventListener('touchstart', function(e) {
-                startX = e.touches[0].clientX;
-            }, {passive: true});
-
-            gallery.addEventListener('touchend', function(e) {
-                const endX = e.changedTouches[0].clientX;
-                const diff = startX - endX;
-                if (Math.abs(diff) > 40) {
-                    goTo(index + (diff > 0 ? 1 : -1));
-                }
-            }, {passive: true});
-        });
-
-        // 音乐控制
-        const bgMusic = document.getElementById('bgMusic');
-        const musicToggle = document.getElementById('musicToggle');
-
-        if (bgMusic && musicToggle) {
-            // 设置音量
-            bgMusic.volume = 0.4;
-
-            let userPaused = false;
-
-            function startMusic() {
-                // 用户主动暂停后，不再自动重启
-                if (bgMusic.paused && !userPaused) {
-                    const p = bgMusic.play();
-                    if (p !== undefined) {
-                        p.then(() => {
-                            musicToggle.classList.add('playing');
-                            musicToggle.textContent = '🔊';
-                            musicToggle.title = '点击暂停音乐';
-                        }).catch(() => {
-                            // 自动播放被浏览器阻止，保持待点击状态
-                            musicToggle.classList.remove('playing');
-                            musicToggle.textContent = '🎵';
-                            musicToggle.title = '点击播放音乐';
-                        });
-                    }
-                }
-            }
-
-            // 尝试自动播放（大多数浏览器会阻止，属正常现象）
-            startMusic();
-
-            // 首次交互即自动播放：第一次点按/滑动/按键即触发，效果接近“自动播放”
-            function onFirstInteraction(e) {
-                // 忽略音乐按钮自身，避免与暂停/播放切换冲突
-                if (e.target && e.target.closest && e.target.closest('#musicToggle')) return;
-                startMusic();
-            }
-            ['touchstart', 'pointerdown', 'click', 'keydown'].forEach(function(evt) {
-                document.addEventListener(evt, onFirstInteraction, { passive: true });
-            });
-
-            // 按钮点击控制（播放/暂停切换）
-            musicToggle.addEventListener('click', function() {
-                if (bgMusic.paused) {
-                    userPaused = false;
-                    bgMusic.play();
-                    musicToggle.textContent = '🔊';
-                    musicToggle.classList.add('playing');
-                    musicToggle.title = '点击暂停音乐';
-                } else {
-                    userPaused = true;
-                    bgMusic.pause();
-                    musicToggle.textContent = '🎵';
-                    musicToggle.classList.remove('playing');
-                    musicToggle.title = '点击播放音乐';
-                }
-            });
+          }
         }
+
+        // 尝试自动播放（大多数浏览器会阻止，属正常现象）
+        startMusic();
+
+        // 首次交互即自动播放：第一次点按/滑动/按键即触发，效果接近“自动播放”
+        function onFirstInteraction(e) {
+          // 忽略音乐按钮自身，避免与暂停/播放切换冲突
+          if (e.target && e.target.closest && e.target.closest("#musicToggle"))
+            return;
+          startMusic();
+        }
+        ["touchstart", "pointerdown", "click", "keydown"].forEach(
+          function (evt) {
+            document.addEventListener(evt, onFirstInteraction, {
+              passive: true,
+            });
+          },
+        );
+
+        // 按钮点击控制（播放/暂停切换）
+        musicToggle.addEventListener("click", function () {
+          if (bgMusic.paused) {
+            userPaused = false;
+            bgMusic.play();
+            musicToggle.textContent = "🔊";
+            musicToggle.classList.add("playing");
+            musicToggle.title = "点击暂停音乐";
+          } else {
+            userPaused = true;
+            bgMusic.pause();
+            musicToggle.textContent = "🎵";
+            musicToggle.classList.remove("playing");
+            musicToggle.title = "点击播放音乐";
+          }
+        });
+      }
     </script>
-</body>
+  </body>
 </html>
