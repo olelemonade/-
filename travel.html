@@ -1,0 +1,714 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>台湾中南部 · 地图总览</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei",
+          sans-serif;
+      }
+      #map {
+        width: 100%;
+        height: 100%;
+      }
+
+      .top-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(8px);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      }
+      .top-bar .back-btn {
+        background: #667eea;
+        color: #fff;
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 18px;
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .top-bar .title {
+        font-size: 17px;
+        font-weight: 600;
+        color: #4a5a6a;
+        white-space: nowrap;
+      }
+      .top-bar .legend {
+        margin-left: auto;
+        display: flex;
+        gap: 8px;
+        font-size: 12px;
+        color: #667;
+        align-items: center;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+      }
+      .top-bar .legend .lg {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+      }
+      .top-bar .legend .dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+
+      .spot-marker {
+        background: #fff;
+        border: 2.5px solid #667eea;
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.28);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 17px;
+        transition: transform 0.15s;
+      }
+      .spot-marker:hover {
+        transform: scale(1.18);
+      }
+      .marker-taichung {
+        border-color: #f4a259;
+      }
+      .marker-tainan {
+        border-color: #7fb069;
+      }
+      .marker-kaohsiung {
+        border-color: #4a9fd8;
+      }
+
+      .spot-popup .leaflet-popup-content-wrapper {
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        padding: 0;
+      }
+      .spot-popup .leaflet-popup-content {
+        margin: 0;
+        padding: 0;
+        width: 300px !important;
+        line-height: 1.5;
+      }
+      .spot-popup .leaflet-popup-tip {
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      }
+
+      .popup-gallery {
+        position: relative;
+        overflow: hidden;
+        height: 190px;
+        background: #e8e8e8;
+      }
+      .popup-gallery .gallery-track {
+        display: flex;
+        height: 100%;
+        transition: transform 0.3s ease;
+      }
+      .popup-gallery .gallery-track img {
+        flex: 0 0 100%;
+        width: 100%;
+        height: 190px;
+        object-fit: cover;
+      }
+      .popup-gallery .gallery-dots {
+        position: absolute;
+        bottom: 8px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+      }
+      .popup-gallery .gallery-dots .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.6);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .popup-gallery .gallery-dots .dot.active {
+        background: #fff;
+        width: 18px;
+        border-radius: 4px;
+      }
+
+      .popup-body {
+        padding: 14px 16px 16px;
+      }
+      .popup-body h3 {
+        font-size: 19px;
+        color: #667eea;
+        margin-bottom: 4px;
+      }
+      .popup-body .city-tag {
+        display: inline-block;
+        font-size: 11px;
+        padding: 2px 9px;
+        border-radius: 10px;
+        color: #fff;
+        margin-bottom: 8px;
+      }
+      .popup-body .feature {
+        font-size: 14px;
+        color: #444;
+        margin-bottom: 6px;
+      }
+      .popup-body .photo-tip {
+        background: #e6f7ff;
+        border-left: 3px solid #1890ff;
+        padding: 8px 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 8px 0;
+      }
+      .popup-body .cc-tip {
+        background: #fff5e6;
+        border-left: 3px solid #ff9800;
+        padding: 8px 10px;
+        border-radius: 6px;
+        font-size: 13px;
+        margin: 8px 0;
+      }
+      .popup-body .meta {
+        font-size: 13px;
+        color: #666;
+        margin-top: 4px;
+      }
+      .popup-body .social-links {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+      .popup-body .social-btn {
+        display: inline-flex;
+        align-items: center;
+        padding: 8px 14px;
+        border-radius: 18px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        color: #fff;
+      }
+      .xhs-btn {
+        background: #ff2442;
+      }
+      .ins-btn {
+        background: linear-gradient(
+          45deg,
+          #f09433,
+          #e6683c,
+          #dc2743,
+          #cc2366,
+          #bc1888
+        );
+      }
+      .map-btn {
+        background: #4285f4;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="top-bar">
+      <a
+        class="back-btn"
+        href="index.html"
+        onclick="if(history.length > 1){history.back(); return false;}"
+        >← 返回</a
+      >
+      <span class="title">🏝️ 三城总览</span>
+      <span class="legend">
+        <span class="lg"><span class="dot" style="background: #f4a259"></span>台中</span>
+        <span class="lg"><span class="dot" style="background: #7fb069"></span>台南</span>
+        <span class="lg"><span class="dot" style="background: #4a9fd8"></span>高雄</span>
+      </span>
+    </div>
+    <div id="map"></div>
+
+    <script>
+      // ---- 城市颜色 ----
+      var CITY = {
+        taichung: { label: "台中", color: "#f4a259" },
+        tainan: { label: "台南", color: "#7fb069" },
+        kaohsiung: { label: "高雄", color: "#4a9fd8" },
+      };
+
+      // ---- 景点数据 ----
+      var spots = [
+        // ===== 台中 =====
+        {
+          city: "taichung",
+          name: "国家歌剧院",
+          emoji: "📚",
+          coords: [24.163, 120.6387],
+          images: ["images/台中/台中%20国家歌剧院.jpg"],
+          feature: "伊东丰雄设计的曲面建筑",
+          photo: "1F大厅仰拍、户外水池倒影、6F空中花园",
+          stay: "1-1.5小时",
+          xhs: "小红书 台中国家歌剧院",
+          ins: "台中国家歌剧院",
+        },
+        {
+          city: "taichung",
+          name: "审计新村",
+          emoji: "🌿",
+          coords: [24.1408, 120.6818],
+          images: ["images/台中/台中%20审计新村.jpg"],
+          feature: "文创聚落，网红咖啡店",
+          photo: "彩色货柜屋、文艺小店、涂鸦墙",
+          stay: "2小时",
+          xhs: "小红书 台中审计新村",
+          ins: "审计新村",
+        },
+        {
+          city: "taichung",
+          name: "彩虹眷村",
+          emoji: "🌈",
+          coords: [24.136, 120.6177],
+          images: ["images/台中/台中%20彩虹眷村.jpg"],
+          feature: "彩虹爷爷手绘的梦幻村落",
+          photo: "彩色墙面全身照（超出片！）",
+          stay: "1小时",
+          xhs: "小红书 台中彩虹眷村",
+          ins: "彩虹眷村",
+        },
+        {
+          city: "taichung",
+          name: "逢甲夜市",
+          emoji: "🌃",
+          coords: [24.1797, 120.645],
+          images: [
+            "images/台中/台中%20逢甲夜市.jpg",
+            "images/台中/台中%20逢甲夜市%202.jpg",
+          ],
+          feature: "台中最大夜市",
+          photo: "霓虹灯招牌、美食近拍",
+          stay: "2-3小时",
+          xhs: "小红书 逢甲夜市",
+          ins: "逢甲夜市",
+        },
+        {
+          city: "taichung",
+          name: "宫原眼科",
+          emoji: "🍨",
+          coords: [24.1378, 120.6835],
+          images: ["images/台中/台中%20宫原眼科.jpg"],
+          feature: "百年药局改建的冰淇淋名店",
+          photo: "复古药柜装潢、冰淇淋塔",
+          stay: "30分钟-1小时",
+          xhs: "小红书 台中宫原眼科",
+          ins: "宫原眼科",
+        },
+
+        // ===== 台南 =====
+        {
+          city: "tainan",
+          name: "赤崁楼",
+          emoji: "🏰",
+          coords: [22.9974, 120.2025],
+          images: [
+            "images/台南/台南%20赤崁楼.jpg",
+            "images/台南/台南%20赤坎楼%202.jpg",
+          ],
+          feature: "台南最重要古迹",
+          photo: "红砖城楼、庭院池塘",
+          stay: "1小时",
+          xhs: "小红书 台南赤崁楼",
+          ins: "赤崁楼",
+        },
+        {
+          city: "tainan",
+          name: "神农街",
+          emoji: "🛍️",
+          coords: [22.9976, 120.1965],
+          images: ["images/台南/台南%20神农街%20.jpg"],
+          feature: "台南最美老街",
+          photo: "夜晚红灯笼街景",
+          stay: "1.5小时",
+          xhs: "小红书 台南神农街",
+          ins: "神农街",
+        },
+        {
+          city: "tainan",
+          name: "安平古堡",
+          emoji: "🏛️",
+          coords: [23.0013, 120.1606],
+          images: ["images/台南/台南%20安平古堡.jpg"],
+          feature: "台湾最古老城堡",
+          photo: "城堡全景、瞭望台",
+          stay: "1.5小时",
+          cc: "😎 小川觉得路过看看就行",
+          xhs: "小红书 安平古堡",
+          ins: "安平古堡",
+        },
+        {
+          city: "tainan",
+          name: "奇美博物馆",
+          emoji: "🎨",
+          coords: [22.9348, 120.2261],
+          images: [
+            "images/台南/台南%20奇美博物馆%201%20.jpg",
+            "images/台南/台南%20奇美博物馆%202.jpg",
+            "images/台南/台南%20奇美博物馆%203.jpg",
+          ],
+          feature: "欧式宫殿建筑，好出片，但距离市区车程近1小时",
+          photo: "太阳喷泉、白色宫殿",
+          stay: "2-3小时",
+          xhs: "小红书 奇美博物馆",
+          ins: "奇美博物馆",
+        },
+        {
+          city: "tainan",
+          name: "32唱片行",
+          emoji: "🎵",
+          coords: [22.991688, 120.20749],
+          images: ["images/台南/台南%2032唱片行.jpg"],
+          feature: "《想见你》拍摄场景·陶艺文创空间",
+          photo: "复古西药房老屋、唱片墙",
+          stay: "30分钟-1小时",
+          extra: "🕑 营业：14:00-19:00（周日一二休息）",
+          xhs: "小红书 台南32唱片行",
+          ins: "32唱片行",
+        },
+        {
+          city: "tainan",
+          name: "阿堂咸粥",
+          emoji: "🥣",
+          coords: [22.9905, 120.1968],
+          images: [
+            "images/台南/台南%20阿堂咸粥%201.jpg",
+            "images/台南/台南%20阿堂咸粥%202%20.jpg",
+          ],
+          feature: "台南经典早餐·土魠鱼咸粥",
+          photo: "地道摊位、排队人潮",
+          stay: "30分钟",
+          xhs: "小红书 阿堂咸粥",
+          ins: "阿堂咸粥",
+        },
+        {
+          city: "tainan",
+          name: "文章牛肉汤",
+          emoji: "🍲",
+          coords: [22.9896, 120.1971],
+          images: [
+            "images/台南/台南%20文章牛肉汤%201.jpg",
+            "images/台南/台南%20文章牛肉汤%202.jpg",
+          ],
+          feature: "现烫牛肉汤·台南必吃",
+          photo: "热气腾腾的牛肉汤",
+          stay: "30分钟",
+          xhs: "小红书 文章牛肉汤",
+          ins: "文章牛肉汤",
+        },
+        {
+          city: "tainan",
+          name: "度小月担仔面",
+          emoji: "🍜",
+          coords: [22.9919, 120.1974],
+          images: [
+            "images/台南/台南%20度小月担仔面%201.jpg",
+            "images/台南/台南%20度小月担仔面%202.jpg",
+          ],
+          feature: "百年老店·担仔面始祖",
+          photo: "复古店面、红灯笼",
+          stay: "30分钟",
+          xhs: "小红书 度小月担仔面",
+          ins: "度小月担仔面",
+        },
+        {
+          city: "tainan",
+          name: "周氏虾卷",
+          emoji: "🍤",
+          coords: [23.0018, 120.1605],
+          images: ["images/台南/台南%20周氏虾卷.jpg"],
+          feature: "安平在地虾卷老店",
+          photo: "现炸虾卷",
+          stay: "30分钟",
+          xhs: "小红书 周氏虾卷",
+          ins: "周氏虾卷",
+        },
+        {
+          city: "tainan",
+          name: "冰鄉",
+          emoji: "🍧",
+          coords: [22.996, 120.2045],
+          images: [
+            "images/台南/台南冰乡%201%20%281%29.jpg",
+            "images/台南/台南冰乡%202.jpg",
+          ],
+          feature: "40年老字号·芒果冰/草莓冰",
+          photo: "满到溢出来的水果冰",
+          stay: "30分钟-1小时",
+          extra: "🕑 营业：12:00-20:00（夏季芒果冰可能提前售完）",
+          xhs: "小红书 台南冰鄉",
+          ins: "冰鄉",
+        },
+
+        // ===== 高雄 =====
+        {
+          city: "kaohsiung",
+          name: "美丽岛捷运站",
+          emoji: "🚇",
+          coords: [22.6314, 120.302],
+          images: [
+            "https://images.unsplash.com/photo-1524168948095-0e628393b60f?w=400&h=300&fit=crop",
+          ],
+          feature: "世界最美地铁站",
+          photo: "仰拍光之穹顶",
+          stay: "30分钟",
+          xhs: "小红书 高雄美丽岛站",
+          ins: "美丽岛站",
+        },
+        {
+          city: "kaohsiung",
+          name: "驳二艺术特区",
+          emoji: "🏛️",
+          coords: [22.6202, 120.2815],
+          images: [
+            "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=400&h=300&fit=crop",
+          ],
+          feature: "文创艺术聚落",
+          photo: "大型艺术装置、涂鸦墙",
+          stay: "2-3小时",
+          xhs: "小红书 高雄驳二",
+          ins: "驳二艺术特区",
+        },
+        {
+          city: "kaohsiung",
+          name: "西子湾",
+          emoji: "🌉",
+          coords: [22.6234, 120.2658],
+          images: [
+            "https://images.unsplash.com/photo-1562979314-bee7453e911c?w=400&h=300&fit=crop",
+          ],
+          feature: "海景夕阳",
+          photo: "日落剪影、海边礁石",
+          stay: "2小时",
+          xhs: "小红书 高雄西子湾",
+          ins: "西子湾",
+        },
+        {
+          city: "kaohsiung",
+          name: "龙虎塔",
+          emoji: "⛩️",
+          coords: [22.6832, 120.2938],
+          images: [
+            "https://images.unsplash.com/photo-1548013146-72479768bada?w=400&h=300&fit=crop",
+          ],
+          feature: "莲池潭标志景点",
+          photo: "双塔倒影、龙虎口",
+          stay: "1小时",
+          xhs: "小红书 高雄龙虎塔",
+          ins: "龙虎塔",
+        },
+        {
+          city: "kaohsiung",
+          name: "六合夜市",
+          emoji: "🍢",
+          coords: [22.633, 120.3019],
+          images: [
+            "https://images.unsplash.com/photo-1555126634-323283e090fa?w=400&h=300&fit=crop",
+          ],
+          feature: "高雄最知名观光夜市",
+          photo: "木瓜牛奶、夜市招牌",
+          stay: "1-2小时",
+          xhs: "小红书 高雄六合夜市",
+          ins: "六合夜市",
+        },
+        {
+          city: "kaohsiung",
+          name: "丹丹汉堡",
+          emoji: "🍔",
+          coords: [22.6379, 120.302],
+          images: [
+            "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&h=300&fit=crop",
+          ],
+          feature: "南台湾限定速食（连锁，市区多处）",
+          photo: "招牌套餐、限定饮料",
+          stay: "30分钟",
+          xhs: "小红书 高雄丹丹汉堡",
+          ins: "丹丹汉堡",
+        },
+      ];
+
+      // ---- 生成弹窗 HTML ----
+      function buildPopup(s) {
+        var c = CITY[s.city];
+        var imgs = s.images
+          .map(function (src, i) {
+            return (
+              '<img src="' +
+              src +
+              '" alt="' +
+              s.name +
+              '" onerror="this.src=\'https://via.placeholder.com/400x300/667eea/ffffff?text=' +
+              s.name +
+              '\'">'
+            );
+          })
+          .join("");
+        var dots = s.images
+          .map(function (_, i) {
+            return '<span class="dot' + (i === 0 ? " active" : "") + '"></span>';
+          })
+          .join("");
+        var gallery =
+          '<div class="popup-gallery"><div class="gallery-track">' +
+          imgs +
+          "</div>" +
+          (s.images.length > 1
+            ? '<div class="gallery-dots">' + dots + "</div>"
+            : "") +
+          "</div>";
+        var cc = s.cc ? '<div class="cc-tip">' + s.cc + "</div>" : "";
+        var extra = s.extra ? '<p class="meta">' + s.extra + "</p>" : "";
+
+        return (
+          gallery +
+          '<div class="popup-body">' +
+          '<span class="city-tag" style="background:' +
+          c.color +
+          '">' +
+          c.label +
+          "</span>" +
+          "<h3>" +
+          s.emoji +
+          " " +
+          s.name +
+          "</h3>" +
+          '<p class="feature"><strong>特色：</strong>' +
+          s.feature +
+          "</p>" +
+          '<div class="photo-tip"><strong>📸 拍照点：</strong>' +
+          s.photo +
+          "</div>" +
+          cc +
+          '<p class="meta">⏰ 建议停留：' +
+          s.stay +
+          "</p>" +
+          extra +
+          '<div class="social-links">' +
+          '<a href="https://www.baidu.com/s?wd=' +
+          s.xhs +
+          '" target="_blank" class="social-btn xhs-btn">📕 小红书</a>' +
+          '<a href="https://www.instagram.com/explore/tags/' +
+          s.ins +
+          '/" target="_blank" class="social-btn ins-btn">📷 Instagram</a>' +
+          '<a href="https://maps.google.com/?q=' +
+          s.coords[0] +
+          "," +
+          s.coords[1] +
+          '" target="_blank" class="social-btn map-btn">🗺️ 导航</a>' +
+          "</div></div>"
+        );
+      }
+
+      // ---- 初始化地图 ----
+      var map = L.map("map").setView([23.4, 120.55], 9);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "OpenStreetMap",
+        maxZoom: 18,
+      }).addTo(map);
+
+      var bounds = [];
+      spots.forEach(function (s) {
+        var icon = L.divIcon({
+          className: "spot-marker marker-" + s.city,
+          html: "<span>" + s.emoji + "</span>",
+          iconSize: [34, 34],
+          iconAnchor: [17, 17],
+          popupAnchor: [0, -20],
+        });
+        var marker = L.marker(s.coords, { icon: icon }).addTo(map);
+        marker.bindPopup(buildPopup(s), {
+          maxWidth: 300,
+          className: "spot-popup",
+          closeButton: true,
+        });
+        bounds.push(s.coords);
+      });
+
+      // 自动缩放到能显示所有景点
+      map.fitBounds(L.latLngBounds(bounds), { padding: [40, 40] });
+
+      // ---- 弹窗内图片轮播 ----
+      function bindGallery(popupEl) {
+        popupEl.querySelectorAll(".popup-gallery").forEach(function (gallery) {
+          var track = gallery.querySelector(".gallery-track");
+          var imgs = track.querySelectorAll("img");
+          var dots = gallery.querySelectorAll(".dot");
+          if (imgs.length < 2) return;
+          var index = 0;
+          function goTo(i) {
+            index = (i + imgs.length) % imgs.length;
+            track.style.transform = "translateX(" + -index * 100 + "%)";
+            dots.forEach(function (d, di) {
+              d.classList.toggle("active", di === index);
+            });
+          }
+          dots.forEach(function (dot, di) {
+            dot.addEventListener("click", function () {
+              goTo(di);
+            });
+          });
+          var startX = 0;
+          gallery.addEventListener(
+            "touchstart",
+            function (e) {
+              startX = e.touches[0].clientX;
+            },
+            { passive: true }
+          );
+          gallery.addEventListener(
+            "touchend",
+            function (e) {
+              var endX = e.changedTouches[0].clientX;
+              var diff = startX - endX;
+              if (Math.abs(diff) > 40) {
+                goTo(index + (diff > 0 ? 1 : -1));
+              }
+            },
+            { passive: true }
+          );
+        });
+      }
+
+      map.on("popupopen", function (e) {
+        bindGallery(e.popup.getElement());
+      });
+    </script>
+  </body>
+</html>

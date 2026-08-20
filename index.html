@@ -407,17 +407,17 @@
           transform: scale(1.05);
         }
       }
-      .map-nav-btn {
+      .map-overview-btn {
         position: fixed;
         bottom: 30px;
         left: 30px;
         width: 60px;
         height: 60px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #4ecdc4 0%, #2ea8a0 100%);
         border: 3px solid white;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        font-size: 28px;
+        box-shadow: 0 4px 15px rgba(78, 205, 196, 0.4);
+        font-size: 26px;
         cursor: pointer;
         z-index: 1000;
         transition: all 0.3s;
@@ -425,12 +425,13 @@
         align-items: center;
         justify-content: center;
         color: white;
+        text-decoration: none;
       }
-      .map-nav-btn:hover {
+      .map-overview-btn:hover {
         transform: scale(1.1);
-        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        box-shadow: 0 6px 20px rgba(78, 205, 196, 0.6);
       }
-      .map-nav-btn:active {
+      .map-overview-btn:active {
         transform: scale(0.95);
       }
       @media (max-width: 768px) {
@@ -441,12 +442,12 @@
           right: 20px;
           font-size: 24px;
         }
-        .map-nav-btn {
+        .map-overview-btn {
           width: 50px;
           height: 50px;
           bottom: 20px;
           left: 20px;
-          font-size: 24px;
+          font-size: 22px;
         }
       }
       @media print {
@@ -456,7 +457,7 @@
         .music-btn {
           display: none;
         }
-        .map-nav-btn {
+        .map-overview-btn {
           display: none;
         }
       }
@@ -472,15 +473,8 @@
     <!-- 音乐控制按钮 -->
     <button id="musicToggle" class="music-btn" title="点击播放音乐">🎵</button>
 
-    <!-- 回到地图按钮 -->
-    <button
-      id="backToMapBtn"
-      class="map-nav-btn"
-      title="回到地图"
-      onclick="goToSlide('map-slide')"
-    >
-      🗺️
-    </button>
+    <!-- 总览按钮（跳转三城地图总览） -->
+    <a href="travel.html" class="map-overview-btn" title="三城总览">🧭</a>
 
     <div class="container">
       <!-- 封面页 -->
@@ -888,9 +882,6 @@
               <div class="photo-tip">
                 <strong>📸 拍照点：</strong>红砖城楼、庭院池塘
               </div>
-              <div class="cc-tip">
-                <strong>😎 就在市区，小川觉得路过看看就行</strong>
-              </div>
               <p style="margin-top: 10px">⏰ 建议停留：1小时</p>
               <div class="social-links">
                 <a
@@ -964,6 +955,9 @@
               <p><strong>特色：</strong>台湾最古老城堡</p>
               <div class="photo-tip">
                 <strong>📸 拍照点：</strong>城堡全景、瞭望台
+              </div>
+              <div class="cc-tip">
+                <strong>😎 小川觉得路过看看就行</strong>
               </div>
               <p style="margin-top: 10px">⏰ 建议停留：1.5小时</p>
               <div class="social-links">
@@ -1684,7 +1678,7 @@
           .scrollBy({ top: window.innerHeight, behavior: "smooth" });
       }
 
-      // 跳转到指定 slide（城市卡片 / 回到地图按钮用）
+      // 跳转到指定 slide（封面城市卡片用）
       function goToSlide(id) {
         var slide = document.getElementById(id);
         var container = document.querySelector(".container");
@@ -1695,6 +1689,28 @@
           container.scrollTop;
         container.scrollTo({ top: top, behavior: "smooth" });
       }
+
+      // 记录滚动位置（从总览页返回时恢复到离开前的那一页）
+      var scrollContainer = document.querySelector(".container");
+      scrollContainer.addEventListener(
+        "scroll",
+        function () {
+          try {
+            sessionStorage.setItem("indexScrollTop", scrollContainer.scrollTop);
+          } catch (e) {}
+        },
+        { passive: true }
+      );
+
+      // 恢复上次离开时的滚动位置
+      (function () {
+        try {
+          var saved = sessionStorage.getItem("indexScrollTop");
+          if (saved !== null) {
+            scrollContainer.scrollTop = parseInt(saved, 10);
+          }
+        } catch (e) {}
+      })();
 
       document.addEventListener("keydown", function (e) {
         const c = document.querySelector(".container");
