@@ -287,6 +287,32 @@
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.05); }
         }
+        .map-nav-btn {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: 3px solid white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .map-nav-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+        .map-nav-btn:active {
+            transform: scale(0.95);
+        }
         @media (max-width: 768px) {
             .music-btn {
                 width: 50px;
@@ -295,8 +321,15 @@
                 right: 20px;
                 font-size: 24px;
             }
+            .map-nav-btn {
+                width: 50px;
+                height: 50px;
+                bottom: 20px;
+                left: 20px;
+                font-size: 24px;
+            }
         }
-        @media print { .slide { page-break-after: always; } .music-btn { display: none; } }
+        @media print { .slide { page-break-after: always; } .music-btn { display: none; } .map-nav-btn { display: none; } }
     </style>
 </head>
 <body>
@@ -309,6 +342,9 @@
     <!-- 音乐控制按钮 -->
     <button id="musicToggle" class="music-btn" title="点击播放音乐">🎵</button>
 
+    <!-- 回到地图按钮 -->
+    <button id="backToMapBtn" class="map-nav-btn" title="回到地图" onclick="goToSlide('map-slide')">🗺️</button>
+
     <div class="container">
         <!-- 封面页 -->
         <div class="slide">
@@ -320,15 +356,15 @@
                     👧 祝贝贝同学玩的开心！
                 </div>
                 <div class="info-grid" style="margin-top: 40px;">
-                    <div class="info-card">
+                    <div class="info-card" style="cursor:pointer;" onclick="goToSlide('taichung-slide')">
                         <h3>🏙️ 台中</h3>
                         <p style="font-size: 16px; margin-top: 10px;">1-2天 | 文艺清新</p>
                     </div>
-                    <div class="info-card">
+                    <div class="info-card" style="cursor:pointer;" onclick="goToSlide('tainan-slide')">
                         <h3>🏛️ 台南</h3>
                         <p style="font-size: 16px; margin-top: 10px;">2-3天 | 古城美食</p>
                     </div>
-                    <div class="info-card">
+                    <div class="info-card" style="cursor:pointer;" onclick="goToSlide('kaohsiung-slide')">
                         <h3>🌊 高雄</h3>
                         <p style="font-size: 16px; margin-top: 10px;">1天 | 港都风情</p>
                     </div>
@@ -340,7 +376,7 @@
         </div>
 
         <!-- 地图页 -->
-        <div class="slide">
+        <div class="slide" id="map-slide">
             <div class="slide-content">
                 <h2>🗺️ 景点地图总览</h2>
                 <p style="margin-bottom: 15px; color: #666;">点击地图标记查看景点详情，可放大缩小和拖动</p>
@@ -435,7 +471,7 @@
         </div>
 
         <!-- 台中景点 -->
-        <div class="slide">
+        <div class="slide" id="taichung-slide">
             <div class="slide-content">
                 <h2>🏙️ 台中必游景点</h2>
                 <div class="spot-list">
@@ -554,7 +590,7 @@
         </div>
 
         <!-- 台南景点 -->
-        <div class="slide">
+        <div class="slide" id="tainan-slide">
             <div class="slide-content">
                 <h2>🏛️ 台南必游景点</h2>
                 <div class="spot-list">
@@ -580,7 +616,7 @@
                         </div>
                     </div>
                     <div class="spot-item">
-                        <img src="images/台南/台南%20神农街.jpg" class="spot-img" alt="神农街" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=神农街'">
+                        <img src="images/台南/台南%20神农街%20.jpg" class="spot-img" alt="神农街" onerror="this.src='https://via.placeholder.com/400x300/667eea/ffffff?text=神农街'">
                         <h3>🛍️ 神农街</h3>
                         <p><strong>特色：</strong>台南最美老街</p>
                         <div class="photo-tip"><strong>📸 拍照点：</strong>夜晚红灯笼街景</div>
@@ -779,7 +815,7 @@
         </div>
 
         <!-- 高雄景点 -->
-        <div class="slide">
+        <div class="slide" id="kaohsiung-slide">
             <div class="slide-content">
                 <h2>🌊 高雄必游景点</h2>
                 <div class="spot-list">
@@ -939,6 +975,15 @@
 
         function scrollToNext(){
             document.querySelector(".container").scrollBy({top:window.innerHeight,behavior:"smooth"});
+        }
+
+        // 跳转到指定 slide（城市卡片 / 回到地图按钮用）
+        function goToSlide(id){
+            var slide = document.getElementById(id);
+            var container = document.querySelector(".container");
+            if (!slide || !container) return;
+            var top = slide.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
+            container.scrollTo({ top: top, behavior: "smooth" });
         }
 
         document.addEventListener("keydown",function(e){
